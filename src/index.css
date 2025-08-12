@@ -1,0 +1,4 @@
+/* index.css 또는 tailwind.config.js에 추가 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
