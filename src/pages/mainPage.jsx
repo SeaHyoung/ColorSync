@@ -41,6 +41,9 @@ export default function MainPage() {
                 <p className="sub-title text-5xl">
                     데이터에 감각을 더하다3 제발좀 돼리
                 </p>
+                <p className="sub-title text-5xl">
+                    데이터에 감각을 더하다4 제발좀 돼리
+                </p>
                 <button
                     onClick={() => navigate("/dashboard")}
                     className="start text-6xl"
