@@ -1,0 +1,105 @@
+.main-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-size: cover;
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    position: relative;
+    font-family: "Arial", sans-serif;
+}
+
+/* 상단 로그인/조인 버튼 */
+.top {
+    float: left;
+    width: 100%;
+    padding: 50px 50px;
+}
+
+.top .auth-button {
+    float: right;
+    margin-left: 30px;
+    height: 100%;
+    padding: 12px 40px;
+    border: 1px solid white;
+    border-radius: 30px;
+    background: transparent;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+    background-color: white;
+    color: #3b3bff;
+}
+
+/* 메인 콘텐츠 위치 조정 */
+.content {
+    position: absolute;
+    bottom: 15%;
+    left: 5%;
+    margin-top: auto;
+}
+
+.main-title {
+    font-size: 150px;
+    font-weight: 800;
+    margin-bottom: 40px;
+}
+
+.sub-title {
+    /* font-size: 35px; */
+    color: #cceaff;
+    padding-left: 20px;
+    margin-bottom: 60px;
+}
+
+.start {
+    /* font-size: 35px; */
+    padding-left: 20px;
+    color: #00e0ff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.start:hover {
+    color: white;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.3s ease-in forwards;
+}
+.join-form {
+    padding: 40vh 10vw;
+}
+.login-form {
+    padding: 40vh 10vw;
+}

@@ -1,0 +1,245 @@
+/* 전체 페이지 세팅 */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+/* 상단 네비게이션 바 */
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 5vh;
+    padding: 0 1vw;
+    background-color: white;
+    border-bottom: 1px solid #e0e0e0;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.nav-section {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+.nav-icon {
+    background: transparent;
+    color: #4f41af;
+    padding: 0.5vw;
+    border-radius: 4px;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon:hover {
+    color: #05b4ff;
+}
+
+.nav-title {
+    margin-left: 30px;
+    font-weight: 500;
+    font-size: 1.8rem;
+    color: #a3a3a3;
+    text-align: left;
+    flex-grow: 1;
+}
+
+/* 상단 차트 종류 선택 슬라이드  */
+.chart-type-selector .chart-icon-button {
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #d0d0ff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chart-type-selector {
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    padding: 1vw;
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+    scrollbar-width: none; /* Firefox */
+}
+
+.chart-type-selector::-webkit-scrollbar {
+    display: none; /* Chrome */
+}
+
+.chart-icon-button {
+    min-width: 10%;
+    min-height: 100%;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* 메인 영역 (하단) */
+.dashboard-main {
+    display: flex;
+    flex: 1;
+    height: 87vh;
+    width: 100%;
+}
+
+/* 차트 보드 (왼쪽 75%) */
+.chart-board {
+    flex: 0 0 75%;
+    width: 100%;
+    /* 전체 차트 영역 높이 비율 */
+    padding: 0 1vw;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+.board-title {
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    height: 8vh;
+    width: 100%;
+    margin-bottom: 2vh;
+    line-height: 8vh;
+    background-color: #e7edea;
+}
+
+.boards {
+    height: 68vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3열 */
+    grid-template-rows: repeat(2, 1fr); /* 2행 */
+    gap: 1.5vh 1vw;
+    width: 100%;
+}
+
+.chart-item {
+    background-color: #f3f3ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.chart-item:hover {
+    background-color: #c2c2fa;
+    transform: translateY(-2px);
+}
+
+/* 컬러 슬라이더 (중간 5%) */
+/* .color-slider {
+    flex: 0 0 5%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+.color-slider-container-vertical {
+    height: 80vh;
+    width: 180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.color-slider-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* gap: 1vh; */
+    perspective: 1000px;
+}
+
+.color-block {
+    width: 140px;
+    height: 70px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    background: linear-gradient(to right, #ccc, #eee);
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 1);
+}
+
+/* 설정 보드 (오른쪽 20%) */
+.setting-board {
+    flex: 0 0 20%;
+    display: flex;
+    flex-direction: column;
+    padding: 2vh 2vw;
+    background-color: #ffffff;
+    font-size: 17pt;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    margin-bottom: 20px;
+}
+
+.attribute-options button {
+    width: 50px;
+    height: 50px;
+    margin-right: 0.5vw;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+}
+
+.color-option {
+    display: flex;
+    gap: 0.5vw;
+}
+
+.color-option button {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #ddd;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+.tags span {
+    float: left;
+    background-color: #eee;
+    padding: 4px 8px;
+    margin-right: 4px;
+    border-radius: 12px;
+    font-size: 20pt;
+}
+
+.apply,
+.reset {
+    padding: 0.5vh 1vw;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.apply {
+    background-color: #d0eaff;
+}
+
+.reset {
+    background-color: #ffe0e0;
+}
