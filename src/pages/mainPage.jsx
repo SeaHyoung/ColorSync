@@ -38,6 +38,7 @@ export default function MainPage() {
                 <h1 className="main-title ">ColorSync</h1>
                 <p className="sub-title text-5xl">데이터에 감각을 더하다1</p>
                 <p className="sub-title text-5xl">데이터에 감각을 더하다2</p>
+                <p className="sub-title text-5xl">데이터에 감각을 더하다5</p>
                 <button
                     onClick={() => navigate("/dashboard")}
                     className="start text-6xl"
