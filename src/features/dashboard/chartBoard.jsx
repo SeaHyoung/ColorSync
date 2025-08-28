@@ -31,7 +31,7 @@ const ChartBoard = ({ slots, setSlots }) => {
     const renderChart = (type) => {
         if (type === "bar") return <BarChart />;
         if (type === "doughnut") return <DoughnutChart />;
-        return <span className="placeholder">Drop chart here</span>;
+        return <span className="placeholder"></span>;
     };
 
     return (

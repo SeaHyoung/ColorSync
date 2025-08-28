@@ -3,7 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const axios = require("axios");
 
-dotenv.config();
+dotenv.config(); //.env 파일을 읽기 위함
 
 const app = express();
 app.use(cors());

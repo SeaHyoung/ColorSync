@@ -133,13 +133,16 @@
     border-radius: 12px;
     display: flex;
     align-items: center;
+    gap: 16px;
+    padding: 25px;
+    box-sizing: border-box;
     justify-content: center;
     font-weight: 500;
     font-size: 1.1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
 }
-/* seonjeong add */
+/* seonjeong */
 .chart-item.drag-over {
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.08);
@@ -148,6 +151,10 @@
 .chart-item:hover {
     background-color: #c2c2fa;
     transform: translateY(-2px);
+}
+.chart-canvas {
+    height: 70%;
+    width: 80%;
 }
 
 /* 컬러 슬라이더 (중간 5%) */
