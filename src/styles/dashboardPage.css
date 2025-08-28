@@ -139,6 +139,11 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
 }
+/* seonjeong add */
+.chart-item.drag-over {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
 
 .chart-item:hover {
     background-color: #c2c2fa;
