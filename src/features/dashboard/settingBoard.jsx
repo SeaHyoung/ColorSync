@@ -1,21 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@mui/material";
 
-const SettingBoard = () => {
+//props 추가됨(slot, setSlots, selectedSlotIndex)
+const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     // 기본값 지정
-    // 속성 기본값 1에서 null 로 변경 
+    // 속성 기본값 1에서 null 로 변경
     const [attributeCount, setAttributeCount] = useState(null);
     const [emphasisAttr, setEmphasisAttr] = useState(null);
-
     const [backgroundColor, setBackgroundColor] = useState("#ffffff");
     const [keyColor, setKeyColor] = useState("#000000");
 
-
     //배경색, 키컬러 히스토리 초기값
-    const [bgHistory, setBgHistory] = useState(["#87CEEB", "#EEDDD1", "#6A2C91", "#F2C230"]);
-    const [keyHistory, setKeyHistory] = useState(["#FF5733", "#33FF99", "#3366FF", "#000000"]);
-
+    const [bgHistory, setBgHistory] = useState([
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+    ]);
+    const [keyHistory, setKeyHistory] = useState([
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+    ]);
     const [keyword, setKeyword] = useState("");
 
     // 해시태그 상태 (등장/퇴장 애니메이션용)
@@ -24,6 +32,35 @@ const SettingBoard = () => {
     // 추천 컬러 상태
     const [colors, setColors] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    //selectedSlotIndex 변경 시 상태 초기화/업데이트
+    useEffect(() => {
+        const currentSlot = slots?.[selectedSlotIndex];
+        if (currentSlot && currentSlot.settings) {
+            const {
+                attributeCount,
+                emphasisAttr,
+                backgroundColor,
+                keyColor,
+                colors,
+                keyword,
+            } = currentSlot.settings;
+            setAttributeCount(attributeCount ?? 1);
+            setEmphasisAttr(emphasisAttr ?? 1);
+            setBackgroundColor(backgroundColor ?? "#ffffff");
+            setKeyColor(keyColor ?? "#ffffff");
+            setColors(colors ?? []);
+            setKeyword(keyword ?? "");
+        } else {
+            // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
+            setAttributeCount(5);
+            setEmphasisAttr(1);
+            setBackgroundColor("#ffffff");
+            setKeyColor("#ffffff");
+            setColors([]);
+            setKeyword("");
+        }
+    }, [selectedSlotIndex, slots]);
 
     // 적용(기존 라우트)
     const handleApply = async () => {
@@ -54,7 +91,7 @@ const SettingBoard = () => {
         setAttributeCount(1);
         setEmphasisAttr(1);
         setBackgroundColor("#ffffff");
-        setKeyColor("#000000");
+        setKeyColor("#ffffff");
         setKeyword("");
         setColors([]);
     };
@@ -103,13 +140,6 @@ const SettingBoard = () => {
         }
     };
 
-    // Enter로 추천 호출
-    //const handleKeywordKeyDown = (e) => {
-    //   if (e.key === "Enter") fetchPalette();
-    // };
-
-    // Enter 입력 시: 공백 제외한 키워드가 있으면
-    //  태그 추가 후 팔레트 검색 실행하고 입력창 초기화
     const handleKeywordKeyDown = (e) => {
         if (e.key === "Enter" && keyword.trim()) {
             const q = keyword.trim();
@@ -118,9 +148,6 @@ const SettingBoard = () => {
             setKeyword("");
         }
     };
-
-    //태그클릭
-    //const pickTag = (tag) => setKeyword(tag);
 
     // 태그 클릭 시: 앞의 '#'과 공백을 제거하고 입력창에 단어만 세팅
     const pickTag = (tag) => setKeyword(tag.replace(/^#\s?/, ""));
@@ -159,7 +186,6 @@ const SettingBoard = () => {
                     ))}
                 </div>
 
-
                 <div className="section emphasis-attributes">
                     <label>강조속성</label>
                     <div className="attribute-options">
@@ -176,37 +202,18 @@ const SettingBoard = () => {
                     </div>
                 </div>
 
-
                 <div className="section recent-backgrounds">
                     <label>배경색</label>
 
                     <div className="bg-picker-row">
                         <div className="color-option">
-                            {/* <button
-                        type="button"
-                        style={{ backgroundColor }}
-                        onClick={() => setShowBgColorPicker(!showBgColorPicker)}
-                    />
-                    {showBgColorPicker && (
-                        <input
-                            type="color"
-                            value={backgroundColor}
-                            onChange={(e) => setBackgroundColor(e.target.value)}
-                        />
-                    )} */}
-
-                            {/* <input
-                        type="color"
-                        aria-label="색상 선택"
-                        value={backgroundColor}
-                        onChange={(e) => setBackgroundColor(e.target.value)}
-                        className="color-btn"
-                    /> */}
                             <input
                                 type="color"
                                 aria-label="배경색 선택"
                                 value={backgroundColor}
-                                onChange={(e) => onChangeBackground(e.target.value)}
+                                onChange={(e) =>
+                                    onChangeBackground(e.target.value)
+                                }
                                 className="color-btn"
                             />
                         </div>
@@ -220,7 +227,7 @@ const SettingBoard = () => {
                                     title={hex}
                                     aria-label={`히스토리 색상 ${hex}`}
                                     style={{ background: hex }}
-                                    onClick={() => setBackgroundColor(hex)}  // 클릭하면 다시 적용 (선택)
+                                    onClick={() => setBackgroundColor(hex)} // 클릭하면 다시 적용 (선택)
                                 />
                             ))}
                         </div>
@@ -230,27 +237,14 @@ const SettingBoard = () => {
                 <div className="section recent-keycolors">
                     <label>키 컬러</label>
                     <div className="key-picker-row">
-
                         <div className="color-option">
-                            {/* <button
-                        type="button"
-                        style={{ backgroundColor: keyColor }}
-                        onClick={() =>
-                            setShowKeyColorPicker(!showKeyColorPicker)
-                        }
-                    />
-                    {showKeyColorPicker && (
-                        <input
-                            type="color"
-                            value={keyColor}
-                            onChange={(e) => setKeyColor(e.target.value)}
-                        />
-                    )} */}
                             <input
                                 type="color"
                                 aria-label="키 컬러 선택"
                                 value={keyColor}
-                                onChange={(e) => onChangeKeyColor(e.target.value)}   // 🔵 여기 연결
+                                onChange={(e) =>
+                                    onChangeKeyColor(e.target.value)
+                                } // 🔵 여기 연결
                                 className="color-btn"
                             />
                         </div>
@@ -281,11 +275,6 @@ const SettingBoard = () => {
                     onKeyDown={handleKeywordKeyDown}
                 />
                 <div className="tags">
-                    {/* <span onClick={() => pickTag("# 시원한")}># 시원한</span>
-                    <span onClick={() => pickTag("# intellectual")}>
-                        # intellectual
-                    </span>
-                    <span onClick={() => pickTag("# modern")}># modern</span> */}
                     {tags.map((t) => (
                         <span
                             key={t.id}
@@ -299,10 +288,6 @@ const SettingBoard = () => {
             </div>
 
             <div className="section buttons">
-                {/* mui 버튼 불러오는거
-                <Button variant="contained" size="large">적용</Button>
-                <Button variant="contained" size="small">적용</Button>
-                */}
                 <button type="button" className="apply" onClick={handleApply}>
                     적용
                 </button>

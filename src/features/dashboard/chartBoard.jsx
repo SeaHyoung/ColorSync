@@ -3,8 +3,12 @@ import React, { useState } from "react";
 import BarChart from "./BarChart";
 import DoughnutChart from "./DoughnutChart";
 
-const ChartBoard = ({ slots, setSlots }) => {
-    // 드래그 오버 시 스타일 주기 위한 상태(선택)
+const ChartBoard = ({
+    slots,
+    setSlots,
+    selectedSlotIndex,
+    setSelectedSlotIndex,
+}) => {
     const [overIndex, setOverIndex] = useState(null);
     const items = Array.from({ length: 6 }, (_, i) => i); // 0..5
 
@@ -23,14 +27,23 @@ const ChartBoard = ({ slots, setSlots }) => {
         setOverIndex(null);
         setSlots((prev) => {
             const next = [...prev];
-            next[idx] = type; // 해당 칸에 차트 타입 저장
+            // 해당 칸에 차트 타입 저장, 설정객체저장
+            next[idx] = { type, settings: {} };
             return next;
         });
+        setSelectedSlotIndex(idx); //드롭 후 해당 슬롯 선택
     };
 
-    const renderChart = (type) => {
-        if (type === "bar") return <BarChart />;
-        if (type === "doughnut") return <DoughnutChart />;
+    const handleSlotClick = (idx) => {
+        // 슬롯 클릭 핸들러 추가
+        setSelectedSlotIndex(idx);
+    };
+
+    const renderChart = (slot) => {
+        if (!slot) return <span className="placeholder"></span>;
+        if (slot.type === "bar") return <BarChart {...slot.settings} />;
+        if (slot.type === "doughnut")
+            return <DoughnutChart {...slot.settings} />;
         return <span className="placeholder"></span>;
     };
 
@@ -43,10 +56,11 @@ const ChartBoard = ({ slots, setSlots }) => {
                         key={i}
                         className={`chart-item ${
                             overIndex === i ? "drag-over" : ""
-                        }`}
+                        } ${selectedSlotIndex === i ? "selected" : ""}`}
                         onDragOver={(e) => handleDragOver(e, i)}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, i)}
+                        onClick={() => handleSlotClick(i)}
                     >
                         {/* Block 텍스트는 차트가 없을 때만 보여주기 */}
                         {slots?.[i] === null && (
