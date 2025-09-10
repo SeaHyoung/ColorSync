@@ -5,14 +5,28 @@ import { Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DoughnutChart({
-    colors = ["#31A843", "#FEFE57", "#52B960"],
+    colors = [
+        "#A9A9A9",
+        "#888888",
+        "#696969",
+        "#555555",
+        "#444444",
+        "#202020ff",
+    ],
+    dataValues = [50, 65, 80, 40, 75, 100],
+    dataCount = 3,
 }) {
+    const labels = Array.from(
+        { length: dataCount },
+        (_, i) => `Label ${i + 1}`
+    );
     const data = {
-        labels: ["Alpha", "Beta", "Gamma"],
+        labels: labels,
         datasets: [
             {
                 label: "Share",
-                data: [40, 35, 25],
+                // 도넛차트는 데이터의 합이 100분율이어야 하므로 차트의 길이만큼 데이터 slice 하여 사용
+                data: dataValues.slice(0, dataCount),
                 backgroundColor: colors,
                 borderWidth: 0,
                 hoverOffset: 4,

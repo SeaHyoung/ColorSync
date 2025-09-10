@@ -41,9 +41,15 @@ const ChartBoard = ({
 
     const renderChart = (slot) => {
         if (!slot) return <span className="placeholder"></span>;
-        if (slot.type === "bar") return <BarChart {...slot.settings} />;
-        if (slot.type === "doughnut")
-            return <DoughnutChart {...slot.settings} />;
+        // if (slot.type === "bar") return <BarChart {...slot.settings} />;
+        // if (slot.type === "doughnut")
+        //     return <DoughnutChart {...slot.settings} />;
+        const settings = slot.settings || {}; // 설정 객체 없으면 빈 객체
+        const dataCount = settings.attributeCount || 4; // 기본값 5
+        const chartProps = { dataCount, colors: settings.colors }; // dataCount와 colors 전달
+
+        if (slot.type === "bar") return <BarChart {...chartProps} />;
+        if (slot.type === "doughnut") return <DoughnutChart {...chartProps} />;
         return <span className="placeholder"></span>;
     };
 
@@ -62,11 +68,6 @@ const ChartBoard = ({
                         onDrop={(e) => handleDrop(e, i)}
                         onClick={() => handleSlotClick(i)}
                     >
-                        {/* Block 텍스트는 차트가 없을 때만 보여주기 */}
-                        {slots?.[i] === null && (
-                            <h3 className="chart-title">Block {i + 1}</h3>
-                        )}
-
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
                         <div className="chart-canvas">
                             {slots?.[i] !== undefined && renderChart(slots[i])}

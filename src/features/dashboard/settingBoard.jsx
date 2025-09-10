@@ -45,16 +45,16 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 colors,
                 keyword,
             } = currentSlot.settings;
-            setAttributeCount(attributeCount ?? 1);
-            setEmphasisAttr(emphasisAttr ?? 1);
+            setAttributeCount(attributeCount ?? 0);
+            setEmphasisAttr(emphasisAttr ?? 0);
             setBackgroundColor(backgroundColor ?? "#ffffff");
             setKeyColor(keyColor ?? "#ffffff");
             setColors(colors ?? []);
             setKeyword(keyword ?? "");
         } else {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
-            setAttributeCount(5);
-            setEmphasisAttr(1);
+            setAttributeCount(0);
+            setEmphasisAttr(0);
             setBackgroundColor("#ffffff");
             setKeyColor("#ffffff");
             setColors([]);
@@ -62,10 +62,14 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         }
     }, [selectedSlotIndex, slots]);
 
-    // 적용(기존 라우트)
+    // 적용 버튼 클릭 핸들러
     const handleApply = async () => {
+        if (selectedSlotIndex == null) {
+            alert("적용할 차트 슬롯을 선택하세요");
+            return;
+        }
         const payload = {
-            attributeCount: attributeCount ?? 1,
+            attributeCount: attributeCount ?? 5,
             emphasisAttr: emphasisAttr ?? 1,
             backgroundColor,
             keyColor,
@@ -79,7 +83,18 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 body: JSON.stringify(payload),
             });
             const data = await res.json();
-            console.log("서버 응답:", data);
+            // console.log("서버 응답:", data);
+
+            setSlots((prev) => {
+                const next = [...prev];
+                if (next[selectedSlotIndex]) {
+                    next[selectedSlotIndex].settings = {
+                        ...payload, // 서버에 보낸 전체 페이로드를 설정으로 저장
+                    };
+                }
+                return next;
+            });
+
             alert("서버 응답: " + (data?.message || "OK"));
         } catch (err) {
             console.error("에러 발생:", err);
@@ -244,7 +259,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                                 value={keyColor}
                                 onChange={(e) =>
                                     onChangeKeyColor(e.target.value)
-                                } // 🔵 여기 연결
+                                }
                                 className="color-btn"
                             />
                         </div>
