@@ -1,7 +1,14 @@
 // src/features/dashboard/chartBoard.jsx
 import React, { useState } from "react";
-import BarChart from "./BarChart";
-import DoughnutChart from "./DoughnutChart";
+import BarChart from "./chart/barChart";
+import DoughnutChart from "./chart/doughnutChart";
+import LineChart from "./chart/lineChart";
+import PieChart from "./chart/pieChart";
+import RadarChart from "./chart/radarChart";
+import PolarAreaChart from "./chart/polarAreaChart";
+import BubbleChart from "./chart/bubbleChart";
+import MixedChart from "./chart/mixedChart";
+import TreeMapChart from "./chart/treeMapChart";
 
 const ChartBoard = ({
     slots,
@@ -41,15 +48,25 @@ const ChartBoard = ({
 
     const renderChart = (slot) => {
         if (!slot) return <span className="placeholder"></span>;
-        // if (slot.type === "bar") return <BarChart {...slot.settings} />;
-        // if (slot.type === "doughnut")
-        //     return <DoughnutChart {...slot.settings} />;
         const settings = slot.settings || {}; // 설정 객체 없으면 빈 객체
-        const dataCount = settings.attributeCount || 4; // 기본값 5
-        const chartProps = { dataCount, colors: settings.colors }; // dataCount와 colors 전달
+        const dataCount = settings.attributeCount || 4; // 기본값 4
+        const finalColors =
+            settings.colors && settings.colors.length > 0
+                ? settings.colors
+                : undefined; // 설정된 색상 배열이 있으면 사용, 없으면 undefined(=기본 흑백색 적용됨)
+
+        const chartProps = { dataCount, colors: finalColors }; // dataCount와 colors 전달
 
         if (slot.type === "bar") return <BarChart {...chartProps} />;
         if (slot.type === "doughnut") return <DoughnutChart {...chartProps} />;
+        if (slot.type === "line") return <LineChart {...chartProps} />;
+        if (slot.type === "pie") return <PieChart {...chartProps} />;
+        if (slot.type === "radar") return <RadarChart {...chartProps} />;
+        if (slot.type === "polarArea")
+            return <PolarAreaChart {...chartProps} />;
+        if (slot.type === "bubble") return <BubbleChart {...chartProps} />;
+        if (slot.type === "mixed") return <MixedChart {...chartProps} />;
+        if (slot.type === "treeMap") return <TreeMapChart {...chartProps} />;
         return <span className="placeholder"></span>;
     };
 

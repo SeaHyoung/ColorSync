@@ -55,7 +55,7 @@
 .chart-type-selector .chart-icon-button {
     padding: 0.5em 1em;
     border: none;
-    background-color: #dbdbdb;
+    background-color: #f8f8f8;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -64,7 +64,7 @@
     height: 15vh;
     display: flex;
     align-items: center;
-    gap: 1vw;
+    gap: 1.2vw;
     padding: 1vw;
     overflow-x: auto;
     overflow-y: auto;
@@ -116,7 +116,7 @@
     width: 100%;
     margin-bottom: 2vh;
     line-height: 8vh;
-    background-color: #dbdbdb;
+    background-color: #f9f9f9;
 }
 
 .boards {
@@ -129,12 +129,12 @@
 }
 
 .chart-item {
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 25px;
+    padding: 15px;
     box-sizing: border-box;
     justify-content: center;
     font-weight: 500;

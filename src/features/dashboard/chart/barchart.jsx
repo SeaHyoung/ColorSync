@@ -30,18 +30,17 @@ export default function BarChart({
         "#444444",
         "#202020ff",
     ],
-    dataValues = [50, 65, 80, 40, 75, 100],
+    // dataValues = [50, 65, 80, 40, 75, 100],
+    // labels = ["A", "B", "C", "D", "E", "F"],
     dataCount = 5, // prop 추가, 기본값 5
 }) {
-    // dataCount에 따라 labels와 data를 동적으로 생성
-    const labels = Array.from(
+    //bar차트는 labels 랜덤이어야 세팅값 업데이트 됨
+    const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
+
+    const dataValues = Array.from(
         { length: dataCount },
-        (_, i) => `Label ${i + 1}`
+        () => Math.floor(Math.random() * 20) + 10
     );
-    // const dataValues = Array.from(
-    //     { length: dataCount },
-    //     () => Math.floor(Math.random() * 20) + 10
-    // );
 
     const data = {
         labels: labels,

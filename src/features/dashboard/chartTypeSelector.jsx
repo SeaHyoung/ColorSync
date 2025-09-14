@@ -50,6 +50,69 @@ const ChartTypeSelector = () => {
                 Doughnut
             </button>
 
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "line")}
+                title="라인차트"
+            >
+                Line
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "pie")}
+                title="파이차트"
+            >
+                Pie
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "radar")}
+                title="레이더차트"
+            >
+                Radar
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "polarArea")}
+                title="폴라에어리어차트"
+            >
+                polarArea
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "bubble")}
+                title="버블차트"
+            >
+                Bubble
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "mixed")}
+                title="믹스차트"
+            >
+                Mixed
+            </button>
+
+            <button
+                className="chart-icon-button"
+                draggable
+                onDragStart={(e) => handleDragStart(e, "treeMap")}
+                title="트리맵차트"
+            >
+                TreeMap
+            </button>
+
             {/* 나머지 아이콘들은 계속 추가 가능 */}
         </div>
     );

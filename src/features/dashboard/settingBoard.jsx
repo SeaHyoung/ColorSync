@@ -69,11 +69,12 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             return;
         }
         const payload = {
-            attributeCount: attributeCount ?? 5,
+            attributeCount: attributeCount ?? 1,
             emphasisAttr: emphasisAttr ?? 1,
             backgroundColor,
             keyColor,
             keyword,
+            colors,
         };
 
         try {
@@ -95,7 +96,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 return next;
             });
 
-            alert("서버 응답: " + (data?.message || "OK"));
+            // alert("서버 응답: " + (data?.message || "OK"));
         } catch (err) {
             console.error("에러 발생:", err);
             alert("요청 실패: " + (err?.message || "unknown error"));
