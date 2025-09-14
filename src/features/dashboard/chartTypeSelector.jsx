@@ -1,5 +1,27 @@
 import React, { useRef, useEffect } from "react";
+import {
+    BarChartIcon,
+    DoughnutChartIcon,
+    PieChartIcon,
+    LineChartIcon,
+    RadarChartIcon,
+    PolarAreaChartIcon,
+    BubbleChartIcon,
+    MixedChartIcon,
+    TreeMapChartIcon,
+} from "./chartIcons";
 
+const chartTypes = [
+    { type: "bar", name: "막대 차트", component: <BarChartIcon /> },
+    { type: "doughnut", name: "도넛 차트", component: <DoughnutChartIcon /> },
+    { type: "line", name: "선 차트", component: <LineChartIcon /> },
+    { type: "pie", name: "파이 차트", component: <PieChartIcon /> },
+    { type: "radar", name: "레이더 차트", component: <RadarChartIcon /> },
+    { type: "polarArea", name: "폴라 차트", component: <PolarAreaChartIcon /> },
+    { type: "bubble", name: "버블 차트", component: <BubbleChartIcon /> },
+    { type: "mixed", name: "믹스 차트", component: <MixedChartIcon /> },
+    { type: "treemap", name: "트리맵", component: <TreeMapChartIcon /> },
+];
 const ChartTypeSelector = () => {
     const scrollRef = useRef();
 
@@ -37,7 +59,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "bar")}
                 title="막대그래프"
             >
-                Bar
+                {<BarChartIcon />}
             </button>
 
             {/* 도넛차트 아이콘 (옵션) */}
@@ -47,7 +69,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "doughnut")}
                 title="도넛차트"
             >
-                Doughnut
+                {<DoughnutChartIcon />}
             </button>
 
             <button
@@ -56,7 +78,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "line")}
                 title="라인차트"
             >
-                Line
+                {<LineChartIcon />}
             </button>
 
             <button
@@ -65,7 +87,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "pie")}
                 title="파이차트"
             >
-                Pie
+                {<PieChartIcon />}
             </button>
 
             <button
@@ -74,7 +96,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "radar")}
                 title="레이더차트"
             >
-                Radar
+                {<RadarChartIcon />}
             </button>
 
             <button
@@ -83,7 +105,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "polarArea")}
                 title="폴라에어리어차트"
             >
-                polarArea
+                {<PolarAreaChartIcon />}
             </button>
 
             <button
@@ -92,7 +114,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "bubble")}
                 title="버블차트"
             >
-                Bubble
+                {<BubbleChartIcon />}
             </button>
 
             <button
@@ -101,7 +123,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "mixed")}
                 title="믹스차트"
             >
-                Mixed
+                {<MixedChartIcon />}
             </button>
 
             <button
@@ -110,7 +132,7 @@ const ChartTypeSelector = () => {
                 onDragStart={(e) => handleDragStart(e, "treeMap")}
                 title="트리맵차트"
             >
-                TreeMap
+                {<TreeMapChartIcon />}
             </button>
 
             {/* 나머지 아이콘들은 계속 추가 가능 */}

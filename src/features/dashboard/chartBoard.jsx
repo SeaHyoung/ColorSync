@@ -70,9 +70,22 @@ const ChartBoard = ({
         return <span className="placeholder"></span>;
     };
 
+    // 차트보드 제목 상태
+    const [boardTitle, setBoardTitle] = useState("Chart Board");
+    // 차트보드 제목변경 핸들러
+    const handleTitleChange = (e) => {
+        setBoardTitle(e.target.value);
+    };
     return (
         <div className="chart-board">
-            <h1 className="board-title">Chart Board</h1>
+            {/* 차트보드 타이틀 */}
+            <input
+                className="board-title"
+                type="text"
+                value={boardTitle}
+                onChange={handleTitleChange}
+            />
+            {/* 차트보드 */}
             <div className="boards">
                 {items.map((i) => (
                     <div

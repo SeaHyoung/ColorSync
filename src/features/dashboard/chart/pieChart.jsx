@@ -14,7 +14,7 @@ export default function PieChart({
         "#202020ff",
     ],
     // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 5,
+    dataCount = 3,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
 

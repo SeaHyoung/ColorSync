@@ -16,7 +16,7 @@ export default function TreemapChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 10,
+    dataCount = 5,
 }) {
     // 트리맵 데이터 생성 함수
     const generateTreemapData = (count) => {
@@ -49,7 +49,7 @@ export default function TreemapChart({
                     color: "white",
                 },
                 backgroundColor: (context) => {
-                    // ✅ 수정: dataIndex를 사용해 색상 배열에 접근합니다.
+                    // dataIndex를 사용해 색상 배열에 접근합니다.
                     const categoryIndex = context.dataIndex % colors.length;
                     return colors[categoryIndex];
                 },

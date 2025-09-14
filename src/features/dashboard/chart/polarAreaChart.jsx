@@ -19,7 +19,7 @@ export default function PolarAreaChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 5,
+    dataCount = 3,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
     const dataValues = Array.from(

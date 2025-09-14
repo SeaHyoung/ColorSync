@@ -32,7 +32,7 @@ export default function BarChart({
     ],
     // dataValues = [50, 65, 80, 40, 75, 100],
     // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 5, // prop 추가, 기본값 5
+    dataCount = 3, //chartSelector에서 보이는 datacount
 }) {
     //bar차트는 labels 랜덤이어야 세팅값 업데이트 됨
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);

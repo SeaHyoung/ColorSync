@@ -11,7 +11,7 @@ import { Bubble } from "react-chartjs-2";
 
 ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
-// ✅ dataCount prop을 받아 데이터셋을 동적으로 생성합니다.
+// dataCount prop을 받아 데이터셋을 동적으로 생성
 export default function BubbleChart({
     colors = [
         "#A9A9A9",
@@ -21,7 +21,7 @@ export default function BubbleChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 2, // 데이터셋 기본 개수
+    dataCount = 3,
 }) {
     // 버블 데이터를 생성하는 헬퍼 함수
     const generateBubbleData = (count) => {
@@ -34,7 +34,7 @@ export default function BubbleChart({
 
     const datasets = Array.from({ length: dataCount }, (_, i) => ({
         label: `${i + 1}`,
-        data: generateBubbleData(5), // 각 데이터셋에는 5개의 버블을 포함합니다.
+        data: generateBubbleData(5), // 각 데이터셋에는 5개의 버블을 포함
         backgroundColor: colors[i % colors.length], // 색상 배열을 순환 사용
     }));
 

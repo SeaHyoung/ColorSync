@@ -15,7 +15,7 @@ export default function DoughnutChart({
     ],
     // dataValues = [50, 65, 80, 40, 75, 100],
     // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 5,
+    dataCount = 3,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
 

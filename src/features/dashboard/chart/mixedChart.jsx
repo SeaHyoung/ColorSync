@@ -33,7 +33,7 @@ export default function MixedChart({
     // barData = [50, 65, 80, 40, 75, 100],
     // lineData = [50, 65, 80, 40, 75, 100],
 
-    dataCount = 5,
+    dataCount = 3,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
     const barData = Array.from(
