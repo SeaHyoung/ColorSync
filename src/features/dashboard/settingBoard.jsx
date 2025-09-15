@@ -17,12 +17,14 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         "#ffffff",
         "#ffffff",
         "#ffffff",
+        "#ffffff"
     ]);
     const [keyHistory, setKeyHistory] = useState([
         "#ffffff",
         "#ffffff",
         "#ffffff",
         "#ffffff",
+        "#ffffff"
     ]);
     const [keyword, setKeyword] = useState("");
 
@@ -32,6 +34,9 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     // 추천 컬러 상태
     const [colors, setColors] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const [tempBg, setTempBg] = useState("#ffffff");
+    const [tempKey, setTempKey] = useState("#000000");
 
     //selectedSlotIndex 변경 시 상태 초기화/업데이트
     useEffect(() => {
@@ -112,23 +117,34 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         setColors([]);
     };
 
-    // 배경색을 바꾸면 히스토리에 반영
-    const onChangeBackground = (hex) => {
+    // 실시간 미리보기만 반영(컬러피커 버튼에만 반영,히스토리는 추가 X)
+    const onChangeBackgroundLive = (hex) => {
+        setTempBg(hex);
         setBackgroundColor(hex);
+    };
+
+    // 컬러피커 닫힐 때 최종 선택만 히스토리에 1회 기록
+    const onBackgroundPickerClose = () => {
         setBgHistory((prev) => {
-            const next = [hex, ...prev.filter((c) => c !== hex)];
-            return next.slice(0, 4); // 최대 4개 유지
+            if (prev[0] === tempBg) return prev;          // 같은 색이면 스킵
+            const next = [tempBg, ...prev.filter((c) => c !== tempBg)];
+            return next.slice(0, 5);
         });
     };
 
-    // 키 컬러를 바꾸면 히스토리에 반영
-    const onChangeKeyColor = (hex) => {
+    const onChangeKeyColorLive = (hex) => {
+        setTempKey(hex);
         setKeyColor(hex);
+    };
+
+    const onKeyPickerClose = () => {
         setKeyHistory((prev) => {
-            const next = [hex, ...prev.filter((c) => c !== hex)];
-            return next.slice(0, 4); // 최대 4개 유지
+            if (prev[0] === tempKey) return prev;
+            const next = [tempKey, ...prev.filter((c) => c !== tempKey)];
+            return next.slice(0, 5);
         });
     };
+
 
     // 추천 컬러 호출
     const fetchPalette = async () => {
@@ -185,6 +201,11 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         });
     };
 
+    // 태그 삭제
+    const removeTag = (id) => {
+        setTags((prev) => prev.filter((t) => t.id !== id));
+    };
+
     return (
         <div className="setting-board">
             <div className="section attribute-count">
@@ -227,9 +248,8 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                                 type="color"
                                 aria-label="배경색 선택"
                                 value={backgroundColor}
-                                onChange={(e) =>
-                                    onChangeBackground(e.target.value)
-                                }
+                                onChange={(e) => onChangeBackgroundLive(e.target.value)}
+                                onBlur={onBackgroundPickerClose}
                                 className="color-btn"
                             />
                         </div>
@@ -258,9 +278,8 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                                 type="color"
                                 aria-label="키 컬러 선택"
                                 value={keyColor}
-                                onChange={(e) =>
-                                    onChangeKeyColor(e.target.value)
-                                }
+                                onChange={(e) => onChangeKeyColorLive(e.target.value)}
+                                onBlur={onKeyPickerClose}
                                 className="color-btn"
                             />
                         </div>
@@ -292,24 +311,25 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 />
                 <div className="tags">
                     {tags.map((t) => (
-                        <span
-                            key={t.id}
-                            onClick={() => pickTag(t.label)}
-                            className="tag"
-                        >
-                            {t.label}
+                        <span key={t.id} className="tag">
+                            <span className="tag-text">{t.label}</span>
+                            <button
+                                type="button"
+                                className="tag-remove"
+                                aria-label={`${t.label} 삭제`}
+                                onClick={() => removeTag(t.id)}
+                                title="태그 삭제"
+                            >
+                                ×
+                            </button>
                         </span>
                     ))}
+
                 </div>
             </div>
 
             <div className="section buttons">
-                <button type="button" className="apply" onClick={handleApply}>
-                    적용
-                </button>
-                <button type="button" className="reset" onClick={handleReset}>
-                    초기화
-                </button>
+
                 <button
                     type="button"
                     onClick={fetchPalette}
@@ -318,37 +338,42 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 >
                     {loading ? "추천 불러오는 중..." : "추천 받기"}
                 </button>
-            </div>
-
-            <div className="section recommendations">
-                <label>추천 컬러</label>
-                <div
-                    className="color-option"
-                    style={{ display: "flex", alignItems: "center" }}
-                >
-                    {colors.length === 0 && (
-                        <div style={{ opacity: 0.6 }}>
-                            키워드 입력 후 Enter 또는 “추천 받기” 클릭
-                        </div>
-                    )}
-                    {colors.map((hex, i) => (
-                        <button
-                            key={i}
-                            type="button"
-                            title={hex}
-                            style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 6,
-                                border: "1px solid #ddd",
-                                background: hex,
-                                marginRight: 8,
-                                cursor: "pointer",
-                            }}
-                            onClick={() => navigator.clipboard.writeText(hex)}
-                        />
-                    ))}
+                <div className="section recommendations">
+                    <label>추천 컬러</label>
+                    <div
+                        className="color-option"
+                        style={{ display: "flex", alignItems: "center" }}
+                    >
+                        {colors.length === 0 && (
+                            <div style={{ opacity: 0.6 }}>
+                                키워드 입력 후 Enter 또는 “추천 받기” 클릭
+                            </div>
+                        )}
+                        {colors.map((hex, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                title={hex}
+                                style={{
+                                    width: 32,
+                                    height: 32,
+                                    borderRadius: 6,
+                                    border: "1px solid #ddd",
+                                    background: hex,
+                                    marginRight: 8,
+                                    cursor: "pointer",
+                                }}
+                                onClick={() => navigator.clipboard.writeText(hex)}
+                            />
+                        ))}
+                    </div>
                 </div>
+                <button type="button" className="apply" onClick={handleApply}>
+                    적용
+                </button>
+                <button type="button" className="reset" onClick={handleReset}>
+                    초기화
+                </button>
             </div>
         </div>
     );

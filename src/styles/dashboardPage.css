@@ -216,22 +216,22 @@
 .key-picker-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.0rem;
 }
 
 .bg-history-inline,
 .key-history-inline {
     display: flex;
-    gap: 0.4rem;
+    gap: 1rem;
 }
 
 .history-swatch {
     width: 50px;
     height: 50px;
-    border-radius: 4px;
+    border-radius: 6px;
     border: 1px solid #aaa;
     cursor: pointer;
-    padding: 0;
+    padding: 4px 8px;
     appearance: none;
 }
 .history-swatch:hover {
@@ -286,14 +286,6 @@
     cursor: pointer;
     border: 1px solid #ccc;
 }
-.tags span {
-    float: left;
-    background-color: #eee;
-    padding: 4px 8px;
-    margin-right: 4px;
-    border-radius: 12px;
-    font-size: 20pt;
-}
 
 .apply,
 .reset {
@@ -336,22 +328,45 @@
     margin-top: 8px;
 }
 
-/* 태그 배지: 정적 스타일만 */
+/* 태그 배지 */
 .setting-board .section.keywords .tag {
-    cursor: pointer;
-    padding: 6px 12px;
+    display: inline-flex;           /* 텍스트+버튼 가로 배치 */
+    align-items: center;            /* 세로 가운데 정렬 */
+    gap: 6px;                        /* 텍스트-버튼 간격 */
+    cursor: default;
+    background-color: #f5f5f5; /* 연회색 */
+    padding: 6px 10px;
     border-radius: 16px;
-    font-size: 14px;
+    font-size: 25px;
     font-weight: 500;
-    color: #fff;
+    color: #000;
     user-select: none;
-    display: inline-block;
-    background: linear-gradient(135deg, #6a5acd, #7b68ee);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 150ms ease, filter 150ms ease;
 }
 
 .setting-board .section.keywords .tag:hover {
-    filter: brightness(1.1);
     transform: scale(1.05);
+}
+
+/* 태그 안의 텍스트 */
+.setting-board .section.keywords .tag-text {
+    pointer-events: none; /* 클릭해도 아무 동작 안 하게 */
+}
+
+/* 태그 안의 삭제 버튼 */
+.setting-board .section.keywords .tag-remove {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.8;
+    transition: opacity 120ms ease;
+}
+
+.setting-board .section.keywords .tag-remove:hover {
+    opacity: 1;
 }
