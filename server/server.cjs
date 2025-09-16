@@ -76,8 +76,31 @@ if (USE_MOCK) {
             return res.status(400).json({ error: "query is required" });
 
         const prompt =
-            `${query} 키워드를 영어로 번역하고, 그 영어에 어울리는 헥사코드 색상 ${n}개를 JSON 배열로만 반환해줘. ` +
-            `예: ["#112233","#AABBCC"] 추가 설명은 절대 쓰지 마.`;
+            `You are a color expert for data-visualization dashboards.
+Goal: Return a ${paletteType} palette of ${n} HEX colors for charts (bar/line/donut) that read clearly on a dark UI.
+
+Context:
+- Concept keyword: "${String(query)}"
+- Dashboard background: "${backgroundColor}" (dark)
+- Preferred key color (optional): "${keyColor ? String(keyColor) : "none"}"
+
+Hard requirements:
+1) Output ONLY a JSON array of HEX strings (e.g., ["#112233","#AABBCC"]). No extra text.
+2) Colors must be distinct and chart-friendly on a dark background:
+   - Avoid pure black/white and extreme neon.
+   - Each pair should be clearly distinguishable (large hue separation if categorical).
+   - Prefer saturation ~40–75% and lightness ~45–65% for legibility on dark UIs.
+3) Ensure good contrast against the dark background for strokes/areas and typical white/near-white labels.
+4) If a key color is provided, include one tone close to it, then harmonize the rest (complementary/analogous/split-complementary).
+5) No transparency, gradients, or names — HEX only.
+
+Rules by paletteType:
+- "categorical": maximize hue diversity and balance chroma; avoid colors that look too similar.
+- "sequential": provide a monotonic progression suitable for low→high magnitude (no banding).
+- "diverging": provide two balanced arms around a neutral center suitable for ± comparisons.
+
+Return ONLY the JSON array of ${n} HEX colors.
+`.trim();
 
         try {
             const t0 = Date.now();
