@@ -1,10 +1,21 @@
 // src/features/dashboard/chartBoard.jsx
 import React, { useState } from "react";
-import BarChart from "./BarChart";
-import DoughnutChart from "./DoughnutChart";
+import BarChart from "./chart/barChart";
+import DoughnutChart from "./chart/doughnutChart";
+import LineChart from "./chart/lineChart";
+import PieChart from "./chart/pieChart";
+import RadarChart from "./chart/radarChart";
+import PolarAreaChart from "./chart/polarAreaChart";
+import BubbleChart from "./chart/bubbleChart";
+import MixedChart from "./chart/mixedChart";
+import TreeMapChart from "./chart/treeMapChart";
 
-const ChartBoard = ({ slots, setSlots }) => {
-    // 드래그 오버 시 스타일 주기 위한 상태(선택)
+const ChartBoard = ({
+    slots,
+    setSlots,
+    selectedSlotIndex,
+    setSelectedSlotIndex,
+}) => {
     const [overIndex, setOverIndex] = useState(null);
     const items = Array.from({ length: 6 }, (_, i) => i); // 0..5
 
@@ -23,36 +34,70 @@ const ChartBoard = ({ slots, setSlots }) => {
         setOverIndex(null);
         setSlots((prev) => {
             const next = [...prev];
-            next[idx] = type; // 해당 칸에 차트 타입 저장
+            // 해당 칸에 차트 타입 저장, 설정객체저장
+            next[idx] = { type, settings: {} };
             return next;
         });
+        setSelectedSlotIndex(idx); //드롭 후 해당 슬롯 선택
     };
 
-    const renderChart = (type) => {
-        if (type === "bar") return <BarChart />;
-        if (type === "doughnut") return <DoughnutChart />;
+    const handleSlotClick = (idx) => {
+        // 슬롯 클릭 핸들러 추가
+        setSelectedSlotIndex(idx);
+    };
+
+    const renderChart = (slot) => {
+        if (!slot) return <span className="placeholder"></span>;
+        const settings = slot.settings || {}; // 설정 객체 없으면 빈 객체
+        const dataCount = settings.attributeCount || 4; // 기본값 4
+        const finalColors =
+            settings.colors && settings.colors.length > 0
+                ? settings.colors
+                : undefined; // 설정된 색상 배열이 있으면 사용, 없으면 undefined(=기본 흑백색 적용됨)
+
+        const chartProps = { dataCount, colors: finalColors }; // dataCount와 colors 전달
+
+        if (slot.type === "bar") return <BarChart {...chartProps} />;
+        if (slot.type === "doughnut") return <DoughnutChart {...chartProps} />;
+        if (slot.type === "line") return <LineChart {...chartProps} />;
+        if (slot.type === "pie") return <PieChart {...chartProps} />;
+        if (slot.type === "radar") return <RadarChart {...chartProps} />;
+        if (slot.type === "polarArea")
+            return <PolarAreaChart {...chartProps} />;
+        if (slot.type === "bubble") return <BubbleChart {...chartProps} />;
+        if (slot.type === "mixed") return <MixedChart {...chartProps} />;
+        if (slot.type === "treeMap") return <TreeMapChart {...chartProps} />;
         return <span className="placeholder"></span>;
     };
 
+    // 차트보드 제목 상태
+    const [boardTitle, setBoardTitle] = useState("Chart Board");
+    // 차트보드 제목변경 핸들러
+    const handleTitleChange = (e) => {
+        setBoardTitle(e.target.value);
+    };
     return (
         <div className="chart-board">
-            <h1 className="board-title">Chart Board</h1>
+            {/* 차트보드 타이틀 */}
+            <input
+                className="board-title"
+                type="text"
+                value={boardTitle}
+                onChange={handleTitleChange}
+            />
+            {/* 차트보드 */}
             <div className="boards">
                 {items.map((i) => (
                     <div
                         key={i}
                         className={`chart-item ${
                             overIndex === i ? "drag-over" : ""
-                        }`}
+                        } ${selectedSlotIndex === i ? "selected" : ""}`}
                         onDragOver={(e) => handleDragOver(e, i)}
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, i)}
+                        onClick={() => handleSlotClick(i)}
                     >
-                        {/* Block 텍스트는 차트가 없을 때만 보여주기 */}
-                        {slots?.[i] === null && (
-                            <h3 className="chart-title">Block {i + 1}</h3>
-                        )}
-
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
                         <div className="chart-canvas">
                             {slots?.[i] !== undefined && renderChart(slots[i])}
