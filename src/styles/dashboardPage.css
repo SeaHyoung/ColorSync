@@ -52,14 +52,6 @@
 }
 
 /* 상단 차트 종류 선택 슬라이드  */
-.chart-type-selector .chart-icon-button {
-    padding: 0.5em 1em;
-    border: none;
-    background-color: #d0d0ff;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .chart-type-selector {
     height: 15vh;
     display: flex;
@@ -70,6 +62,18 @@
     overflow-y: auto;
     white-space: nowrap;
     scrollbar-width: none; /* Firefox */
+}
+
+.chart-type-selector .chart-icon-button {
+    width: 10vw;
+    height: 100%;
+    padding: 1vw;
+    border: none;
+    background-color: #ffffff;
+    border: 0.5px solid #d2d2d2;
+    box-shadow: 4px 4px 5px rgba(204, 204, 204, 0.5); /* 그림자 효과 */
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 .chart-type-selector::-webkit-scrollbar {
@@ -116,7 +120,7 @@
     width: 100%;
     margin-bottom: 2vh;
     line-height: 8vh;
-    background-color: #e7edea;
+    /* background-color: #f9f9f9; */
 }
 
 .boards {
@@ -129,12 +133,12 @@
 }
 
 .chart-item {
-    background-color: #f3f3ff;
+    background-color: #f9f9f9;
     border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 25px;
+    padding: 15px;
     box-sizing: border-box;
     justify-content: center;
     font-weight: 500;
@@ -142,6 +146,12 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
 }
+.chart-item.selected {
+    /* 선택된 슬롯 스타일 */
+    border: 2px solid #505050;
+    box-shadow: 0 0 10px rgba(121, 121, 121, 0.5); /* 그림자 효과 */
+}
+
 /* seonjeong */
 .chart-item.drag-over {
     border-color: rgba(255, 255, 255, 0.4);
@@ -149,7 +159,7 @@
 }
 
 .chart-item:hover {
-    background-color: #c2c2fa;
+    background-color: #dbdbdb;
     transform: translateY(-2px);
 }
 .chart-canvas {
@@ -201,6 +211,40 @@
     font-size: 17pt;
 }
 
+/* 히스토리 */
+.bg-picker-row,
+.key-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 1.0rem;
+}
+
+.bg-history-inline,
+.key-history-inline {
+    display: flex;
+    gap: 1rem;
+}
+
+.history-swatch {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+    padding: 4px 8px;
+    appearance: none;
+}
+.history-swatch:hover {
+    filter: brightness(0.92);
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
 .section {
     display: flex;
     flex-direction: column;
@@ -218,6 +262,17 @@
     cursor: pointer;
 }
 
+.attribute-options button:hover {
+    filter: brightness(0.5);
+}
+
+/* 서이 : 클릭해서 속성옵션 선택된 상태 */
+.attribute-options button.selected {
+    background: #1976d2;
+    color: #ffffff;
+    border-color: #1976d2;
+    filter: none;
+}
 .color-option {
     display: flex;
     gap: 0.5vw;
@@ -230,14 +285,6 @@
     background-color: #ddd;
     cursor: pointer;
     border: 1px solid #ccc;
-}
-.tags span {
-    float: left;
-    background-color: #eee;
-    padding: 4px 8px;
-    margin-right: 4px;
-    border-radius: 12px;
-    font-size: 20pt;
 }
 
 .apply,
@@ -254,4 +301,72 @@
 
 .reset {
     background-color: #ffe0e0;
+}
+
+.color-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.color-btn:hover {
+    /* 호버 = 더 어둡게 */
+    filter: brightness(0.9);
+}
+
+.attribute-options:hover {
+    filter: brightness(0.9);
+}
+
+/* 해시태그 관련 */
+/* 컨테이너 */
+.setting-board .section.keywords .tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+/* 태그 배지 */
+.setting-board .section.keywords .tag {
+    display: inline-flex;           /* 텍스트+버튼 가로 배치 */
+    align-items: center;            /* 세로 가운데 정렬 */
+    gap: 6px;                        /* 텍스트-버튼 간격 */
+    cursor: default;
+    background-color: #f5f5f5; /* 연회색 */
+    padding: 6px 10px;
+    border-radius: 16px;
+    font-size: 25px;
+    font-weight: 500;
+    color: #000;
+    user-select: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 150ms ease, filter 150ms ease;
+}
+
+.setting-board .section.keywords .tag:hover {
+    transform: scale(1.05);
+}
+
+/* 태그 안의 텍스트 */
+.setting-board .section.keywords .tag-text {
+    pointer-events: none; /* 클릭해도 아무 동작 안 하게 */
+}
+
+/* 태그 안의 삭제 버튼 */
+.setting-board .section.keywords .tag-remove {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.8;
+    transition: opacity 120ms ease;
+}
+
+.setting-board .section.keywords .tag-remove:hover {
+    opacity: 1;
 }

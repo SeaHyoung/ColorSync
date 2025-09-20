@@ -11,15 +11,26 @@ import "../styles/dashboardPage.css"; // CSS는 styles 폴더에서 관리 추�
 
 export default function dashboardPage() {
     const [slots, setSlots] = useState(Array(6).fill(null));
+    const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
 
     return (
         <div className="dashboard-container">
             <Nev />
             <ChartTypeSelector />
             <div className="dashboard-main">
-                <ChartBoard slots={slots} setSlots={setSlots} />
+                {/* 차트보드와 세팅보드 상태공유 */}
+                <ChartBoard
+                    slots={slots}
+                    setSlots={setSlots}
+                    selectedSlotIndex={selectedSlotIndex}
+                    setSelectedSlotIndex={setSelectedSlotIndex}
+                />
                 <ColorSlider />
-                <SettingBoard />
+                <SettingBoard
+                    slots={slots}
+                    setSlots={setSlots}
+                    selectedSlotIndex={selectedSlotIndex}
+                />
             </div>
         </div>
     );

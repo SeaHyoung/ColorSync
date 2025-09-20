@@ -22,16 +22,35 @@ ChartJS.register(
 );
 
 export default function BarChart({
-    colors = ["#31A843", "#52B960", "#FEFE57", "#8BD17C", "#2F7A3E"],
+    colors = [
+        "#A9A9A9",
+        "#888888",
+        "#696969",
+        "#555555",
+        "#444444",
+        "#202020ff",
+    ],
+    // dataValues = [50, 65, 80, 40, 75, 100],
+    // labels = ["A", "B", "C", "D", "E", "F"],
+    dataCount = 3, //chartSelector에서 보이는 datacount
 }) {
+    //bar차트는 labels 랜덤이어야 세팅값 업데이트 됨
+    const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
+
+    const dataValues = Array.from(
+        { length: dataCount },
+        () => Math.floor(Math.random() * 20) + 10
+    );
+
     const data = {
-        labels: ["A", "B", "C", "D", "E"],
+        labels: labels,
         datasets: [
             {
-                label: "Sample",
-                data: [12, 19, 3, 5, 2],
+                label: "Share",
+                data: dataValues,
                 backgroundColor: colors,
                 borderWidth: 0,
+                hoverOffset: 4,
             },
         ],
     };
