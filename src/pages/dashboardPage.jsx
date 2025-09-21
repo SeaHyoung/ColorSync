@@ -25,7 +25,7 @@ export default function dashboardPage() {
                     selectedSlotIndex={selectedSlotIndex}
                     setSelectedSlotIndex={setSelectedSlotIndex}
                 />
-                <ColorSlider />
+                {/* <ColorSlider /> */}
                 <SettingBoard
                     slots={slots}
                     setSlots={setSlots}
