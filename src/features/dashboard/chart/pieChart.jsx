@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
@@ -13,11 +13,18 @@ export default function PieChart({
         "#444444",
         "#202020ff",
     ],
-    // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 3,
+    dataCount = 6,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
 
+    // const [dataValues] = useState(() =>
+    //     Array.from(
+    //         { length: dataCount },
+    //         () => Math.floor(Math.random() * 20) + 10
+    //     )
+    // );
+
+    // 데이터 업데이트 제어 useState 사용불가한 차트
     const dataValues = Array.from(
         { length: dataCount },
         () => Math.floor(Math.random() * 20) + 10

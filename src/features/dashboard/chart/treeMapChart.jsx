@@ -16,7 +16,7 @@ export default function TreemapChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 5,
+    dataCount = 6,
 }) {
     // 트리맵 데이터 생성 함수
     const generateTreemapData = (count) => {

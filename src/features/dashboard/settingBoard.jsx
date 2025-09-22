@@ -239,7 +239,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 </div>
             </div>
 
-            <div className="section recent-backgrounds">
+            <div className="section backgrounds-color">
                 <label>배경색</label>
                 <div className="color-options">
                     <input
@@ -265,7 +265,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 </div>
             </div>
 
-            <div className="section recent-keycolors">
+            <div className="section keycolors">
                 <label>키 컬러</label>
                 <div className="color-options">
                     <input
@@ -320,19 +320,16 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
 
             <button
                 type="button"
-                className="recommend"
+                className="btn-recommend"
                 onClick={fetchPalette}
                 disabled={loading || !keyword.trim()}
             >
                 {loading ? "추천 불러오는 중..." : "추천 받기"}
             </button>
 
-            <div className="section color-recommendations">
+            <div className="section recommend">
                 <label>추천 컬러</label>
-                <div
-                    className="results"
-                    style={{ display: "flex", alignItems: "center" }}
-                >
+                <div className="result-color-wrap">
                     {/* {colors.length === 0 && (
                             <div style={{ opacity: 0.6 }}>
                                 키워드 입력 후 Enter 또는 “추천 받기” 클릭
@@ -342,15 +339,10 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                         <button
                             key={i}
                             type="button"
+                            className="results-color-btn"
                             title={hex}
                             style={{
-                                width: 32,
-                                height: 32,
-                                borderRadius: 6,
-                                border: "1px solid #ddd",
                                 background: hex,
-                                marginRight: 8,
-                                cursor: "pointer",
                             }}
                             onClick={() => navigator.clipboard.writeText(hex)}
                         />
@@ -358,10 +350,10 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                 </div>
             </div>
 
-            <button type="button" className="apply" onClick={handleApply}>
+            <button type="button" className="btn-apply" onClick={handleApply}>
                 적용
             </button>
-            <button type="button" className="reset" onClick={handleReset}>
+            <button type="button" className="btn-reset" onClick={handleReset}>
                 초기화
             </button>
         </div>

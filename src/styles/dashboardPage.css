@@ -8,7 +8,7 @@
     overflow: hidden;
 }
 
-/* 상단 네비게이션 바 */
+/* 상단 네비게이션 바 5% 차지*/
 .nav-container {
     display: flex;
     align-items: center;
@@ -51,9 +51,10 @@
     flex-grow: 1;
 }
 
-/* 상단 차트 종류 선택 슬라이드  */
+/* selector 15% 차지  */
 .chart-type-selector {
     height: 15vh;
+    /* height: 200px; */
     display: flex;
     align-items: center;
     gap: 1vw;
@@ -137,7 +138,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 15px;
+    /* padding: 15px; */
     box-sizing: border-box;
     justify-content: center;
     font-weight: 500;
@@ -149,12 +150,10 @@
 }
 
 .chart-item.selected {
-    /* 선택된 슬롯 스타일 */
     border: 2px solid #505050;
     box-shadow: 0 0 10px rgba(121, 121, 121, 0.5); /* 그림자 효과 */
 }
 
-/* seonjeong */
 .chart-item.drag-over {
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.08);
@@ -169,14 +168,6 @@
     width: 80%;
 }
 
-/* 컬러 슬라이더 (중간 5%) */
-/* .color-slider {
-    flex: 0 0 5%;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
 .color-slider-container-vertical {
     height: 80vh;
     width: 180px;
@@ -205,7 +196,10 @@
 
 /* 설정 보드 (오른쪽 20%) */
 .setting-board {
+    height: 80vh;
     flex: 0 0 18%;
+    overflow: scroll;
+    scrollbar-width: none;
     display: flex;
     flex-direction: column;
     gap: 1.5vh;
@@ -348,35 +342,52 @@
     opacity: 1;
 }
 
-.color-recommendations {
-    height: 10vh;
+/* 추천 받기 버튼*/
+.btn-recommend {
+    padding: 0.5vh 1vw;
+    border-radius: 6px;
+    cursor: pointer;
+    /* border: #000000 solid 1px; */
+    background-color: #d4d5d5;
+}
+
+.recommend {
     width: 100%;
     align-items: center;
-    padding: 10px;
-    gap: 3%;
-    display: flex; /* gap설정시 필수 */
-    border: #667686 solid 1px;
-    overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
+    padding: 5%;
+    /* border: #363c42 solid 1px; */
+    background-color: #ffffff;
+    border-radius: 6px;
+    font-size: medium;
 }
 
-/* 추천받기, 적용, 초기화 버튼 */
-.recommend {
+.result-color-wrap {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    /* background-color: #ffffff; */
+    /* display: "flex"; */
+    /* align-items: "center"; */
+}
+
+.results-color-btn {
+    width: 16.66%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+/* 적용, 초기화 버튼 */
+.btn-apply,
+.btn-reset {
     padding: 0.5vh 1vw;
     border-radius: 6px;
     cursor: pointer;
-    border: #000000 solid 1px;
 }
-
-.apply,
-.reset {
-    padding: 0.5vh 1vw;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.apply {
+.btn-apply {
     background-color: #d0eaff;
 }
-.reset {
+.btn-reset {
     background-color: #ffe0e0;
 }

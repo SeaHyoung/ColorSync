@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -29,11 +29,18 @@ const hexToRgba = (hex, alpha) => {
 
 export default function RadarChart({
     colors = ["#A9A9A9", "#696969"],
-    // dataValues = [50, 65, 80, 40, 75, 100],
-    // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 3,
+    dataCount = 6,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
+
+    // const [dataValues] = useState(() =>
+    //     Array.from(
+    //         { length: dataCount },
+    //         () => Math.floor(Math.random() * 10) + 60
+    //     )
+    // );
+
+    // 데이터 업데이트 제어 useState 사용불가한 차트
     const dataValues = Array.from(
         { length: dataCount },
         () => Math.floor(Math.random() * 100) + 30
