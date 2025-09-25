@@ -17,14 +17,14 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         "#ffffff",
         "#ffffff",
         "#ffffff",
-        "#ffffff"
+        "#ffffff",
     ]);
     const [keyHistory, setKeyHistory] = useState([
         "#ffffff",
         "#ffffff",
         "#ffffff",
         "#ffffff",
-        "#ffffff"
+        "#ffffff",
     ]);
     const [keyword, setKeyword] = useState("");
 
@@ -126,7 +126,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     // 컬러피커 닫힐 때 최종 선택만 히스토리에 1회 기록
     const onBackgroundPickerClose = () => {
         setBgHistory((prev) => {
-            if (prev[0] === tempBg) return prev;          // 같은 색이면 스킵
+            if (prev[0] === tempBg) return prev; // 같은 색이면 스킵
             const next = [tempBg, ...prev.filter((c) => c !== tempBg)];
             return next.slice(0, 5);
         });
@@ -144,7 +144,6 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             return next.slice(0, 5);
         });
     };
-
 
     // 추천 컬러 호출
     const fetchPalette = async () => {
@@ -222,92 +221,84 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                         </button>
                     ))}
                 </div>
+            </div>
 
-                <div className="section emphasis-attributes">
-                    <label>강조속성</label>
-                    <div className="attribute-options">
-                        {[1, 2, 3, 4, 5, 6].map((n) => (
-                            <button
-                                type="button"
-                                key={n}
-                                onClick={() => setEmphasisAttr(n)}
-                                className={emphasisAttr === n ? "selected" : ""}
-                            >
-                                {n}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="section recent-backgrounds">
-                    <label>배경색</label>
-
-                    <div className="bg-picker-row">
-                        <div className="color-option">
-                            <input
-                                type="color"
-                                aria-label="배경색 선택"
-                                value={backgroundColor}
-                                onChange={(e) => onChangeBackgroundLive(e.target.value)}
-                                onBlur={onBackgroundPickerClose}
-                                className="color-btn"
-                            />
-                        </div>
-
-                        <div className="bg-history-inline">
-                            {bgHistory.map((hex, i) => (
-                                <button
-                                    key={i}
-                                    type="button"
-                                    className="history-swatch"
-                                    title={hex}
-                                    aria-label={`히스토리 색상 ${hex}`}
-                                    style={{ background: hex }}
-                                    onClick={() => setBackgroundColor(hex)} // 클릭하면 다시 적용 (선택)
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="section recent-keycolors">
-                    <label>키 컬러</label>
-                    <div className="key-picker-row">
-                        <div className="color-option">
-                            <input
-                                type="color"
-                                aria-label="키 컬러 선택"
-                                value={keyColor}
-                                onChange={(e) => onChangeKeyColorLive(e.target.value)}
-                                onBlur={onKeyPickerClose}
-                                className="color-btn"
-                            />
-                        </div>
-                        <div className="key-history-inline">
-                            {keyHistory.map((hex, i) => (
-                                <button
-                                    key={i}
-                                    type="button"
-                                    className="history-swatch"
-                                    title={hex}
-                                    aria-label={`히스토리 색상 ${hex}`}
-                                    style={{ background: hex }}
-                                    onClick={() => setKeyColor(hex)}
-                                />
-                            ))}
-                        </div>
-                    </div>
+            <div className="section emphasis-attributes">
+                <label>강조속성 수</label>
+                <div className="attribute-options">
+                    {[1, 2, 3].map((n) => (
+                        <button
+                            type="button"
+                            key={n}
+                            onClick={() => setEmphasisAttr(n)}
+                            className={emphasisAttr === n ? "selected" : ""}
+                        >
+                            {n}
+                        </button>
+                    ))}
                 </div>
             </div>
 
-            <div className="section keywords" style={{ position: "relative" }}>
+            <div className="section backgrounds-color">
+                <label>배경색</label>
+                <div className="color-options">
+                    <input
+                        type="color"
+                        className="color-choicer"
+                        aria-label="배경색 선택"
+                        value={backgroundColor}
+                        onChange={(e) => onChangeBackgroundLive(e.target.value)}
+                        onBlur={onBackgroundPickerClose}
+                    />
+
+                    {bgHistory.map((hex, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            className="history-swatch"
+                            title={hex}
+                            aria-label={`히스토리 색상 ${hex}`}
+                            style={{ background: hex }}
+                            onClick={() => setBackgroundColor(hex)} // 클릭하면 다시 적용 (선택)
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div className="section keycolors">
+                <label>키 컬러</label>
+                <div className="color-options">
+                    <input
+                        type="color"
+                        className="color-choicer"
+                        aria-label="키 컬러 선택"
+                        value={keyColor}
+                        onChange={(e) => onChangeKeyColorLive(e.target.value)}
+                        onBlur={onKeyPickerClose}
+                    />
+                    {keyHistory.map((hex, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            className="history-swatch"
+                            title={hex}
+                            aria-label={`히스토리 색상 ${hex}`}
+                            style={{ background: hex }}
+                            onClick={() => setKeyColor(hex)}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div className="section keywords">
                 <label>키워드</label>
                 <input
                     type="text"
-                    placeholder="# 해시태그 자동완성"
+                    placeholder="  키워드를 입력하세요"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
                     onKeyDown={handleKeywordKeyDown}
+                    className="keyword-input"
                 />
                 <div className="tags">
                     {tags.map((t) => (
@@ -324,57 +315,47 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                             </button>
                         </span>
                     ))}
-
                 </div>
             </div>
 
-            <div className="section buttons">
+            <button
+                type="button"
+                className="btn-recommend"
+                onClick={fetchPalette}
+                disabled={loading || !keyword.trim()}
+            >
+                {loading ? "추천 불러오는 중..." : "추천 받기"}
+            </button>
 
-                <button
-                    type="button"
-                    onClick={fetchPalette}
-                    disabled={loading || !keyword.trim()}
-                    style={{ marginLeft: 8 }}
-                >
-                    {loading ? "추천 불러오는 중..." : "추천 받기"}
-                </button>
-                <div className="section recommendations">
-                    <label>추천 컬러</label>
-                    <div
-                        className="color-option"
-                        style={{ display: "flex", alignItems: "center" }}
-                    >
-                        {colors.length === 0 && (
+            <div className="section recommend">
+                <label>추천 컬러</label>
+                <div className="result-color-wrap">
+                    {/* {colors.length === 0 && (
                             <div style={{ opacity: 0.6 }}>
                                 키워드 입력 후 Enter 또는 “추천 받기” 클릭
                             </div>
-                        )}
-                        {colors.map((hex, i) => (
-                            <button
-                                key={i}
-                                type="button"
-                                title={hex}
-                                style={{
-                                    width: 32,
-                                    height: 32,
-                                    borderRadius: 6,
-                                    border: "1px solid #ddd",
-                                    background: hex,
-                                    marginRight: 8,
-                                    cursor: "pointer",
-                                }}
-                                onClick={() => navigator.clipboard.writeText(hex)}
-                            />
-                        ))}
-                    </div>
+                        )} */}
+                    {colors.map((hex, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            className="results-color-btn"
+                            title={hex}
+                            style={{
+                                background: hex,
+                            }}
+                            onClick={() => navigator.clipboard.writeText(hex)}
+                        />
+                    ))}
                 </div>
-                <button type="button" className="apply" onClick={handleApply}>
-                    적용
-                </button>
-                <button type="button" className="reset" onClick={handleReset}>
-                    초기화
-                </button>
             </div>
+
+            <button type="button" className="btn-apply" onClick={handleApply}>
+                적용
+            </button>
+            <button type="button" className="btn-reset" onClick={handleReset}>
+                초기화
+            </button>
         </div>
     );
 };
