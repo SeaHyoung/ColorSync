@@ -16,14 +16,6 @@ app.get("/api/health", (_, res) => {
 
 //
 app.post("/api/apply-settings", (req, res) => {
-<<<<<<< HEAD
-    const { attributeCount, emphasisAttr, backgroundColor, keyColor, keyword } =
-        req.body;
-    console.log("클라이언트로부터 받은 데이터:");
-    console.log("속성 수:", attributeCount);
-    console.log("강조속성:", emphasisAttr);
-    console.log("배경색:", backgroundColor);
-=======
     const {
         attributeCount,
         emphasisAttr,
@@ -37,7 +29,6 @@ app.post("/api/apply-settings", (req, res) => {
     console.log("강조속성:", emphasisAttr);
     console.log("차트배경색:", chartBgc);
     console.log("보드배경색:", boardBgc);
->>>>>>> main
     console.log("키 컬러:", keyColor);
     console.log("키워드:", keyword);
     res.json({ message: "설정이 성공적으로 적용되었습니다." });
@@ -87,19 +78,15 @@ if (USE_MOCK) {
                 query,
                 n = 6,
                 paletteType = "categorical",
-<<<<<<< HEAD
-                backgroundColor = "#0B0F1A",
-=======
                 chartBgc = "#0B0F1A",
->>>>>>> main
                 keyColor = null,
             } = req.body || {};
 
-            const API_KEY = process.env.DEEPSEEK_API_KEY;
-            if (!API_KEY) {
+            const GEMINI_KEY = process.env.GEMINI_API_KEY;
+            if (!GEMINI_KEY) {
                 return res
                     .status(500)
-                    .json({ error: "DEEPSEEK_API_KEY missing in .env" });
+                    .json({ error: "GEMINI_API_KEY missing in .env" });
             }
             if (!query || !String(query).trim()) {
                 return res.status(400).json({ error: "query is required" });
@@ -115,14 +102,10 @@ Respond with ONLY a JSON array of HEX (e.g., ["#112233","#AABBCC"]) and nothing 
             const userPrompt = `
 Goal → Return a ${paletteType} palette of ${n} HEX colors for charts on a dark UI.
 
+
 Context:
 - Keyword (semantic theme): "${String(query)}"
-<<<<<<< HEAD
-- Dashboard background: "${backgroundColor}"
-If background is unknown or invalid, assume dark gray (#111827).
-=======
 - Dashboard background: "${chartBgc}"
->>>>>>> main
 - Preferred key color: "${keyColor ? String(keyColor) : "none"}"
 
 Step 0 — Language normalization & domain mapping (execute BEFORE all other rules; this step has priority over later rules):
@@ -206,46 +189,51 @@ Anti-examples (what NOT to do):
 Return ONLY the JSON array of ${n} HEX colors. If your draft contains anything else, regenerate silently and return only the array.
 `.trim();
 
+const combinedPrompt = `### System
+${systemPrompt}
+
+### User
+${userPrompt}
+`;
+
             const t0 = Date.now();
-            const dsRes = await axios.post(
-                "https://api.deepseek.com/v1/chat/completions",
+            const gmRes = await axios.post(
+                "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
                 {
-                    model: "deepseek-chat",
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: userPrompt },
+                    contents: [
+                      { parts: [{ text: combinedPrompt }] }
                     ],
-                    temperature: 0.2,
-                    max_tokens: 256,
+              // 필요시 온도/안전설정 등 추가 가능
+              // generationConfig: { temperature: 0.2, maxOutputTokens: 256 },
                 },
                 {
-                    headers: {
-                        Authorization: `Bearer ${API_KEY}`,
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
-                    },
-                    timeout: 15000,
-                    validateStatus: () => true,
-                }
+                  headers: {
+                    "X-goog-api-key": GEMINI_KEY,
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                  },
+                timeout: 15000,
+                validateStatus: () => true,
+              }
             );
 
             const ms = Date.now() - t0;
-            const status = dsRes.status;
-            const content = dsRes?.data?.choices?.[0]?.message?.content ?? "";
+            const status = gmRes.status;
+            const content = gmRes?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
             console.log("[/api/palette] status:", status, `(${ms}ms)`);
 
             if (status >= 400) {
                 console.error(
-                    "[/api/palette] deepseek error body:",
-                    dsRes.data
+                    "[/api/palette] gemini error body:",
+                    gmRes.data
                 );
                 return res.status(status).json({
-                    error: "deepseek_error",
+                    error: "gemini_error",
                     status,
                     message:
-                        dsRes.data?.error?.message ||
-                        dsRes.data?.message ||
-                        JSON.stringify(dsRes.data).slice(0, 300),
+                        gmRes.data?.error?.message ||
+                        gmRes.data?.message ||
+                        JSON.stringify(gmRes.data).slice(0, 300),
                 });
             }
 
@@ -265,7 +253,7 @@ Return ONLY the JSON array of ${n} HEX colors. If your draft contains anything e
             if (err?.response) {
                 console.error("response.data:", err.response.data);
                 return res.status(err.response.status || 500).json({
-                    error: "deepseek_exception",
+                    error: "gemini_exception",
                     status: err.response.status,
                     message:
                         err.response.data?.error?.message ||
