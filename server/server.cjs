@@ -16,12 +16,19 @@ app.get("/api/health", (_, res) => {
 
 //
 app.post("/api/apply-settings", (req, res) => {
-    const { attributeCount, emphasisAttr, backgroundColor, keyColor, keyword } =
-        req.body;
+    const {
+        attributeCount,
+        emphasisAttr,
+        chartBgc,
+        boardBgc,
+        keyColor,
+        keyword,
+    } = req.body;
     console.log("클라이언트로부터 받은 데이터:");
     console.log("속성 수:", attributeCount);
     console.log("강조속성:", emphasisAttr);
-    console.log("배경색:", backgroundColor);
+    console.log("차트배경색:", chartBgc);
+    console.log("보드배경색:", boardBgc);
     console.log("키 컬러:", keyColor);
     console.log("키워드:", keyword);
     res.json({ message: "설정이 성공적으로 적용되었습니다." });
@@ -71,7 +78,7 @@ if (USE_MOCK) {
                 query,
                 n = 6,
                 paletteType = "categorical",
-                backgroundColor = "#0B0F1A",
+                chartBgc = "#0B0F1A",
                 keyColor = null,
             } = req.body || {};
 
@@ -97,7 +104,7 @@ Goal → Return a ${paletteType} palette of ${n} HEX colors for charts on a dark
 
 Context:
 - Keyword (semantic theme): "${String(query)}"
-- Dashboard background: "${backgroundColor}"
+- Dashboard background: "${chartBgc}"
 - Preferred key color: "${keyColor ? String(keyColor) : "none"}"
 
 Hard requirements:

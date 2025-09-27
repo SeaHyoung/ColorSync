@@ -98,8 +98,8 @@ const ChartBoard = ({
                         onClick={() => handleSlotClick(i)}
                         style={{
                             backgroundColor:
-                                slots[i]?.settings?.backgroundColor || "#fff",
-                            // slots[i]?.settings?.backgroundColor,
+                                // slots[i]?.settings?.backgroundColor || "#fff",
+                                slots[i]?.settings?.chartBgc,
                         }}
                     >
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
