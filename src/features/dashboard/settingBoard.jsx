@@ -204,14 +204,14 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         }
     };
 
-    const handleKeywordKeyDown = (e) => {
-        if (e.key === "Enter" && keyword.trim()) {
-            const q = keyword.trim();
-            addTag(q);
-            fetchPalette(q);
-            setKeyword("");
-        }
-    };
+    // const handleKeywordKeyDown = (e) => {
+    //     if (e.key === "Enter" && keyword.trim()) {
+    //         const q = keyword.trim();
+    //         addTag(q);
+    //         fetchPalette(q);
+    //         setKeyword("");
+    //     }
+    // };
 
     // 태그 클릭 시: 앞의 '#'과 공백을 제거하고 입력창에 단어만 세팅
     const pickTag = (tag) => setKeyword(tag.replace(/^#\s?/, ""));
@@ -255,23 +255,6 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                     ))}
                 </div>
             </div>
-
-            <div className="section emphasis-attributes">
-                <label>강조속성 수</label>
-                <div className="attribute-options">
-                    {[1, 2, 3].map((n) => (
-                        <button
-                            type="button"
-                            key={n}
-                            onClick={() => setEmphasisAttr(n)}
-                            className={emphasisAttr === n ? "selected" : ""}
-                        >
-                            {n}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
             <div className="section backgrounds-color">
                 <label>차트 배경색</label>
                 <div className="color-options">
@@ -297,7 +280,6 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                     ))}
                 </div>
             </div>
-
             <div className="section backgrounds-color">
                 <label>차트보드 배경색</label>
                 <div className="color-options">
@@ -323,98 +305,128 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                     ))}
                 </div>
             </div>
-
-            <div className="section keycolors">
-                <label>키 컬러</label>
-                <div className="color-options">
+            <div className="suggestion-option">
+                <div className="section keywords">
+                    <label>키워드</label>
                     <input
-                        type="color"
-                        className="color-choicer"
-                        aria-label="키 컬러 선택"
-                        value={keyColor}
-                        onChange={(e) => onChangeKeyColorLive(e.target.value)}
-                        onBlur={onKeyPickerClose}
+                        type="text"
+                        placeholder="  키워드를 입력하세요"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        // onKeyDown={handleKeywordKeyDown}
+                        className="keyword-input"
                     />
-                    {keyHistory.map((hex, i) => (
-                        <button
-                            key={i}
-                            type="button"
-                            className="history-swatch"
-                            title={hex}
-                            aria-label={`히스토리 색상 ${hex}`}
-                            style={{ background: hex }}
-                            onClick={() => setKeyColor(hex)}
-                        />
-                    ))}
+                    {/* <div className="tags">
+                        {tags.map((t) => (
+                            <span key={t.id} className="tag">
+                                <span className="tag-text">{t.label}</span>
+                                <button
+                                    type="button"
+                                    className="tag-remove"
+                                    aria-label={`${t.label} 삭제`}
+                                    onClick={() => removeTag(t.id)}
+                                    title="태그 삭제"
+                                >
+                                    ×
+                                </button>
+                            </span>
+                        ))}
+                    </div> */}
                 </div>
-            </div>
 
-            <div className="section keywords">
-                <label>키워드</label>
-                <input
-                    type="text"
-                    placeholder="  키워드를 입력하세요"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    onKeyDown={handleKeywordKeyDown}
-                    className="keyword-input"
-                />
-                <div className="tags">
-                    {tags.map((t) => (
-                        <span key={t.id} className="tag">
-                            <span className="tag-text">{t.label}</span>
+                <div className="section keycolors">
+                    <label>키 컬러</label>
+                    <div className="color-options">
+                        <input
+                            type="color"
+                            className="color-choicer"
+                            aria-label="키 컬러 선택"
+                            value={keyColor}
+                            onChange={(e) =>
+                                onChangeKeyColorLive(e.target.value)
+                            }
+                            onBlur={onKeyPickerClose}
+                        />
+                        {keyHistory.map((hex, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                className="history-swatch"
+                                title={hex}
+                                aria-label={`히스토리 색상 ${hex}`}
+                                style={{ background: hex }}
+                                onClick={() => setKeyColor(hex)}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                <div className="section emphasis-attributes">
+                    <label>강조속성 수</label>
+                    <div className="attribute-options">
+                        {[1, 2, 3].map((n) => (
                             <button
                                 type="button"
-                                className="tag-remove"
-                                aria-label={`${t.label} 삭제`}
-                                onClick={() => removeTag(t.id)}
-                                title="태그 삭제"
+                                key={n}
+                                onClick={() => setEmphasisAttr(n)}
+                                className={emphasisAttr === n ? "selected" : ""}
                             >
-                                ×
+                                {n}
                             </button>
-                        </span>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <button
-                type="button"
-                className="btn-recommend"
-                onClick={fetchPalette}
-                disabled={loading || !keyword.trim()}
-            >
-                {loading ? "추천 불러오는 중..." : "추천 받기"}
-            </button>
+                <button
+                    type="button"
+                    className="recommend-btn"
+                    onClick={fetchPalette}
+                    disabled={loading || !keyword.trim()}
+                >
+                    {loading ? "추천 불러오는 중..." : "추천 받기"}
+                </button>
 
-            <div className="section recommend">
-                <label>추천 컬러</label>
-                <div className="result-color-wrap">
-                    {/* {colors.length === 0 && (
+                <div className="section recommend">
+                    <label>추천 컬러</label>
+                    <div className="result-color-wrap">
+                        {/* {colors.length === 0 && (
                             <div style={{ opacity: 0.6 }}>
                                 키워드 입력 후 Enter 또는 “추천 받기” 클릭
                             </div>
                         )} */}
-                    {colors.map((hex, i) => (
-                        <button
-                            key={i}
-                            type="button"
-                            className="results-color-btn"
-                            title={hex}
-                            style={{
-                                background: hex,
-                            }}
-                            onClick={() => navigator.clipboard.writeText(hex)}
-                        />
-                    ))}
+                        {colors.map((hex, i) => (
+                            <button
+                                key={i}
+                                type="button"
+                                className="results-color-btn"
+                                title={hex}
+                                style={{
+                                    background: hex,
+                                }}
+                                onClick={() =>
+                                    navigator.clipboard.writeText(hex)
+                                }
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
-
-            <button type="button" className="btn-apply" onClick={handleApply}>
-                적용
-            </button>
-            <button type="button" className="btn-reset" onClick={handleReset}>
-                초기화
-            </button>
+            <div className="btn-wrap">
+                <button
+                    type="button"
+                    className="apply-btn"
+                    onClick={handleApply}
+                >
+                    적용
+                </button>
+                <button
+                    type="button"
+                    className="reset-btn"
+                    onClick={handleReset}
+                >
+                    초기화
+                </button>
+            </div>
         </div>
     );
 };

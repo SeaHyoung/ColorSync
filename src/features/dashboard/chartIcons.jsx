@@ -42,7 +42,9 @@ ChartJS.register(
 );
 
 // 모든 차트에 공통으로 적용
-const colors = ["#d3d3d3", "#c8c8c8", "#b7b7b7", "#A8A8A8", "#A8A8A8"];
+// const colors = ["#d3d3d3", "#c8c8c8", "#b7b7b7", "#A8A8A8", "#A8A8A8"];
+// const colors = ["#cce0f5", "#a4d9f4", "#cce0f5", "#a4d9f4", "#cce0f5"];
+const colors = ["#cce0f5", "#cce0f5", "#cce0f5", "#cce0f5", "#cce0f5"];
 const iconOptions = {
     responsive: true,
     maintainAspectRatio: false,

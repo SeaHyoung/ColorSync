@@ -8,7 +8,14 @@
     overflow: hidden;
 }
 
-/* 상단 네비게이션 바 5% 차지*/
+/* 메인 영역 (하단) */
+.dashboard-main {
+    display: flex;
+    flex: 1;
+    height: 87vh;
+    width: 100%;
+}
+/* -----------상단 네비게이션 바 5%----------*/
 .nav-container {
     display: flex;
     align-items: center;
@@ -51,7 +58,7 @@
     flex-grow: 1;
 }
 
-/* selector 15% 차지  */
+/* -----------selector 15%----------- */
 .chart-type-selector {
     height: 15vh;
     /* height: 200px; */
@@ -95,15 +102,7 @@
     padding: 0;
 }
 
-/* 메인 영역 (하단) */
-.dashboard-main {
-    display: flex;
-    flex: 1;
-    height: 87vh;
-    width: 100%;
-}
-
-/* 차트 보드 (왼쪽 75%) */
+/* -----------차트 보드 75%----------- */
 .chart-board {
     /* flex: 0 0 75%; */
     width: 100%;
@@ -194,7 +193,7 @@
     box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 1);
 }
 
-/* 설정 보드 (오른쪽 20%) */
+/* -----------설정 보드 20%----------- */
 .setting-board {
     height: 80vh;
     flex: 0 0 18%;
@@ -203,24 +202,39 @@
     display: flex;
     flex-direction: column;
     gap: 1.5vh;
-    padding: 3vh 3vw 0 2vw;
-    background-color: #f8f8f8;
+    padding: 3vh 2vw 0 1.5vw;
+    /* background-color: #f8f8f8; */
     font-size: 14pt;
 }
-.section {
+.setting-board .section {
     display: flex;
     flex-direction: column;
     gap: 5px;
     /* margin-bottom: 20px; */
 }
-.attribute-options {
+
+.setting-board .suggestion-option {
+    margin: 5% 0 0 0;
+    width: 100%;
+    /* height: 100%; */
+    gap: 1.5vh;
+    display: flex;
+    flex-direction: column;
+    padding: 6%;
+    border-radius: 10px;
+    /* border: 1px solid #05b4ff; */
+    background-color: #e8eaec;
+    /* background-color: #05b4ff; */
+}
+
+.setting-board .attribute-options {
     width: 100%;
     align-items: center;
     gap: 3%;
     display: flex; /* gap설정시 필수 */
     /* background-color: #1976d2; */
 }
-.attribute-options button {
+.setting-board .attribute-options button {
     width: 14.1%;
     height: auto;
     aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
@@ -232,26 +246,26 @@
     cursor: pointer;
 }
 
-.attribute-options button:hover {
+.setting-board .attribute-options button:hover {
     filter: brightness(0.5);
 }
 
 /* 서이 : 클릭해서 속성옵션 선택된 상태 */
-.attribute-options button.selected {
+.setting-board .attribute-options button.selected {
     background: #667686;
     color: #ffffff;
     /* border-color: #1976d2; */
     filter: none;
 }
 
-.color-options {
+.setting-board .color-options {
     width: 100%;
     align-items: center;
     gap: 3%;
     display: flex; /* gap설정시 필수 */
 }
 
-.color-options .color-choicer {
+.setting-board .color-options .color-choicer {
     width: 14.1%;
     height: auto;
     aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
@@ -259,12 +273,12 @@
     cursor: pointer;
 }
 
-.color-options .color-choicer:hover {
+.setting-board .color-options .color-choicer:hover {
     /* 호버 = 더 어둡게 */
     filter: brightness(0.9);
 }
 
-.color-options button {
+.setting-board .color-options button {
     width: 14.1%;
     height: auto;
     aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
@@ -276,12 +290,12 @@
 }
 
 /* 히스토리 버튼 효과 */
-.history-swatch:hover {
+.setting-board .history-swatch:hover {
     filter: brightness(0.92);
 }
 
 /* 키워드 */
-.search-bar {
+.setting-board .search-bar {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -293,7 +307,7 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 8px;
+    /* margin-top: 8px; */
 }
 
 /* 키워드 입력창 크기 */
@@ -310,7 +324,7 @@
     background-color: #f5f5f5; /* 연회색 */
     padding: 6px 10px;
     border-radius: 16px;
-    font-size: 25px;
+    font-size: 15px;
     font-weight: 500;
     color: #000;
     user-select: none;
@@ -344,25 +358,32 @@
 }
 
 /* 추천 받기 버튼*/
-.btn-recommend {
+.setting-board .recommend-btn {
     padding: 0.5vh 1vw;
     border-radius: 6px;
     cursor: pointer;
     /* border: #000000 solid 1px; */
-    background-color: #d4d5d5;
+    background-color: #ffffff;
+    box-shadow: 4px 4px 5px rgba(168, 168, 168, 0.5); /* 그림자 효과 */
 }
 
-.recommend {
+.setting-board .recommend-btn:hover {
+    filter: brightness(0.7);
+}
+
+.setting-board .recommend {
     width: 100%;
+    /* height: 100%; */
     align-items: center;
     padding: 5%;
     /* border: #363c42 solid 1px; */
     background-color: #ffffff;
     border-radius: 6px;
     font-size: medium;
+    color: #667686;
 }
 
-.result-color-wrap {
+.setting-board .result-color-wrap {
     width: 100%;
     height: auto;
     align-items: center;
@@ -371,7 +392,7 @@
     /* align-items: "center"; */
 }
 
-.results-color-btn {
+.setting-board .results-color-btn {
     width: 16.66%;
     height: auto;
     aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
@@ -380,15 +401,23 @@
 }
 
 /* 적용, 초기화 버튼 */
-.btn-apply,
-.btn-reset {
+.setting-board .btn-wrap {
+    align-items: center;
+    gap: 3%;
+    display: flex;
+}
+.setting-board .btn-wrap button {
     padding: 0.5vh 1vw;
     border-radius: 6px;
     cursor: pointer;
+    width: 100%;
 }
-.btn-apply {
+.setting-board .btn-wrap button:hover {
+    filter: brightness(0.9);
+}
+.setting-board .apply-btn {
     background-color: #d0eaff;
 }
-.btn-reset {
+.setting-board .reset-btn {
     background-color: #ffe0e0;
 }
