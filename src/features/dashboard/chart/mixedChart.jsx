@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
     Chart as ChartJS,
     LinearScale,
@@ -30,15 +30,11 @@ export default function MixedChart({
         "#444444",
         "#202020ff",
     ],
-    // barData = [50, 65, 80, 40, 75, 100],
-    // lineData = [50, 65, 80, 40, 75, 100],
-
-    dataCount = 3,
+    dataCount = 6,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
-    const barData = Array.from(
-        { length: dataCount },
-        () => Math.floor(Math.random() * 20) + 10
+    const [barData] = useState(() =>
+        Array.from({ length: 6 }, () => Math.floor(Math.random() * 20) + 10)
     );
     const lineData = barData;
     const data = {

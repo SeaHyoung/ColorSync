@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -19,9 +19,10 @@ export default function PolarAreaChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 3,
+    dataCount = 6,
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
+    // 데이터 업데이트 제어 useState 사용불가한 차트
     const dataValues = Array.from(
         { length: dataCount },
         () => Math.floor(Math.random() * 20) + 10

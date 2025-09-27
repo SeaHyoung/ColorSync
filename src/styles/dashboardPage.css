@@ -8,7 +8,7 @@
     overflow: hidden;
 }
 
-/* 상단 네비게이션 바 */
+/* 상단 네비게이션 바 5% 차지*/
 .nav-container {
     display: flex;
     align-items: center;
@@ -51,9 +51,10 @@
     flex-grow: 1;
 }
 
-/* 상단 차트 종류 선택 슬라이드  */
+/* selector 15% 차지  */
 .chart-type-selector {
     height: 15vh;
+    /* height: 200px; */
     display: flex;
     align-items: center;
     gap: 1vw;
@@ -104,7 +105,7 @@
 
 /* 차트 보드 (왼쪽 75%) */
 .chart-board {
-    flex: 0 0 75%;
+    /* flex: 0 0 75%; */
     width: 100%;
     /* 전체 차트 영역 높이 비율 */
     padding: 0 1vw;
@@ -112,7 +113,7 @@
     box-sizing: border-box;
 }
 
-.board-title {
+.chart-board .board-title {
     font-size: 50px;
     font-weight: 700;
     text-align: center;
@@ -123,37 +124,37 @@
     /* background-color: #f9f9f9; */
 }
 
-.boards {
+.chart-board .boards {
     height: 68vh;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3열 */
     grid-template-rows: repeat(2, 1fr); /* 2행 */
     gap: 1.5vh 1vw;
-    width: 100%;
 }
 
-.chart-item {
-    background-color: #f9f9f9;
+.chart-board .chart-item {
     border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 15px;
+    /* padding: 15px; */
     box-sizing: border-box;
     justify-content: center;
     font-weight: 500;
     font-size: 1.1rem;
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
+    background-color: #ffffff;
+    box-shadow: 3px 3px 4px rgba(204, 204, 204, 0.5);
 }
-.chart-item.selected {
-    /* 선택된 슬롯 스타일 */
-    border: 2px solid #505050;
+
+.chart-board .chart-item.selected {
+    border: 1px solid #505050;
     box-shadow: 0 0 10px rgba(121, 121, 121, 0.5); /* 그림자 효과 */
 }
 
-/* seonjeong */
-.chart-item.drag-over {
+.chart-board .chart-item.drag-over {
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.08);
 }
@@ -167,14 +168,6 @@
     width: 80%;
 }
 
-/* 컬러 슬라이더 (중간 5%) */
-/* .color-slider {
-    flex: 0 0 5%;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
 .color-slider-container-vertical {
     height: 80vh;
     width: 180px;
@@ -203,62 +196,39 @@
 
 /* 설정 보드 (오른쪽 20%) */
 .setting-board {
-    flex: 0 0 20%;
+    height: 80vh;
+    flex: 0 0 18%;
+    overflow: scroll;
+    scrollbar-width: none;
     display: flex;
     flex-direction: column;
-    padding: 2vh 2vw;
-    background-color: #ffffff;
-    font-size: 17pt;
+    gap: 1.5vh;
+    padding: 3vh 3vw 0 2vw;
+    background-color: #f8f8f8;
+    font-size: 14pt;
 }
-
-/* 히스토리 */
-.bg-picker-row,
-.key-picker-row {
-    display: flex;
-    align-items: center;
-    gap: 1.0rem;
-}
-
-.bg-history-inline,
-.key-history-inline {
-    display: flex;
-    gap: 1rem;
-}
-
-.history-swatch {
-    width: 50px;
-    height: 50px;
-    border-radius: 6px;
-    border: 1px solid #aaa;
-    cursor: pointer;
-    padding: 4px 8px;
-    appearance: none;
-}
-.history-swatch:hover {
-    filter: brightness(0.92);
-}
-
-.search-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
 .section {
     display: flex;
     flex-direction: column;
-    gap: 1vh;
-    margin-bottom: 20px;
+    gap: 5px;
+    /* margin-bottom: 20px; */
 }
-
+.attribute-options {
+    width: 100%;
+    align-items: center;
+    gap: 3%;
+    display: flex; /* gap설정시 필수 */
+    /* background-color: #1976d2; */
+}
 .attribute-options button {
-    width: 50px;
-    height: 50px;
-    margin-right: 0.5vw;
+    width: 14.1%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
     padding: 4px 8px;
     border-radius: 6px;
     border: 1px solid #aaa;
+    background-color: #ffffff;
+    font-size: 11pt;
     cursor: pointer;
 }
 
@@ -268,59 +238,57 @@
 
 /* 서이 : 클릭해서 속성옵션 선택된 상태 */
 .attribute-options button.selected {
-    background: #1976d2;
+    background: #667686;
     color: #ffffff;
-    border-color: #1976d2;
+    /* border-color: #1976d2; */
     filter: none;
 }
-.color-option {
-    display: flex;
-    gap: 0.5vw;
+
+.color-options {
+    width: 100%;
+    align-items: center;
+    gap: 3%;
+    display: flex; /* gap설정시 필수 */
 }
 
-.color-option button {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
-    background-color: #ddd;
-    cursor: pointer;
-    border: 1px solid #ccc;
-}
-
-.apply,
-.reset {
-    padding: 0.5vh 1vw;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.apply {
-    background-color: #d0eaff;
-}
-
-.reset {
-    background-color: #ffe0e0;
-}
-
-.color-btn {
-    width: 50px;
-    height: 50px;
+.color-options .color-choicer {
+    width: 14.1%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
     border-radius: 4px;
     cursor: pointer;
 }
 
-.color-btn:hover {
+.color-options .color-choicer:hover {
     /* 호버 = 더 어둡게 */
     filter: brightness(0.9);
 }
 
-.attribute-options:hover {
-    filter: brightness(0.9);
+.color-options button {
+    width: 14.1%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #aaa;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+/* 히스토리 버튼 효과 */
+.history-swatch:hover {
+    filter: brightness(0.92);
+}
+
+/* 키워드 */
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* margin-bottom: 1rem; */
 }
 
 /* 해시태그 관련 */
-/* 컨테이너 */
 .setting-board .section.keywords .tags {
     display: flex;
     gap: 8px;
@@ -328,11 +296,16 @@
     margin-top: 8px;
 }
 
+/* 키워드 입력창 크기 */
+.setting-board .section.keywords .keyword-input {
+    height: 50px;
+}
+
 /* 태그 배지 */
 .setting-board .section.keywords .tag {
-    display: inline-flex;           /* 텍스트+버튼 가로 배치 */
-    align-items: center;            /* 세로 가운데 정렬 */
-    gap: 6px;                        /* 텍스트-버튼 간격 */
+    display: inline-flex; /* 텍스트+버튼 가로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+    gap: 6px; /* 텍스트-버튼 간격 */
     cursor: default;
     background-color: #f5f5f5; /* 연회색 */
     padding: 6px 10px;
@@ -366,7 +339,56 @@
     opacity: 0.8;
     transition: opacity 120ms ease;
 }
-
 .setting-board .section.keywords .tag-remove:hover {
     opacity: 1;
+}
+
+/* 추천 받기 버튼*/
+.btn-recommend {
+    padding: 0.5vh 1vw;
+    border-radius: 6px;
+    cursor: pointer;
+    /* border: #000000 solid 1px; */
+    background-color: #d4d5d5;
+}
+
+.recommend {
+    width: 100%;
+    align-items: center;
+    padding: 5%;
+    /* border: #363c42 solid 1px; */
+    background-color: #ffffff;
+    border-radius: 6px;
+    font-size: medium;
+}
+
+.result-color-wrap {
+    width: 100%;
+    height: auto;
+    align-items: center;
+    /* background-color: #ffffff; */
+    /* display: "flex"; */
+    /* align-items: "center"; */
+}
+
+.results-color-btn {
+    width: 16.66%;
+    height: auto;
+    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+/* 적용, 초기화 버튼 */
+.btn-apply,
+.btn-reset {
+    padding: 0.5vh 1vw;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.btn-apply {
+    background-color: #d0eaff;
+}
+.btn-reset {
+    background-color: #ffe0e0;
 }

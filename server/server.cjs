@@ -16,12 +16,28 @@ app.get("/api/health", (_, res) => {
 
 //
 app.post("/api/apply-settings", (req, res) => {
+<<<<<<< HEAD
     const { attributeCount, emphasisAttr, backgroundColor, keyColor, keyword } =
         req.body;
     console.log("클라이언트로부터 받은 데이터:");
     console.log("속성 수:", attributeCount);
     console.log("강조속성:", emphasisAttr);
     console.log("배경색:", backgroundColor);
+=======
+    const {
+        attributeCount,
+        emphasisAttr,
+        chartBgc,
+        boardBgc,
+        keyColor,
+        keyword,
+    } = req.body;
+    console.log("클라이언트로부터 받은 데이터:");
+    console.log("속성 수:", attributeCount);
+    console.log("강조속성:", emphasisAttr);
+    console.log("차트배경색:", chartBgc);
+    console.log("보드배경색:", boardBgc);
+>>>>>>> main
     console.log("키 컬러:", keyColor);
     console.log("키워드:", keyword);
     res.json({ message: "설정이 성공적으로 적용되었습니다." });
@@ -71,7 +87,11 @@ if (USE_MOCK) {
                 query,
                 n = 6,
                 paletteType = "categorical",
+<<<<<<< HEAD
                 backgroundColor = "#0B0F1A",
+=======
+                chartBgc = "#0B0F1A",
+>>>>>>> main
                 keyColor = null,
             } = req.body || {};
 
@@ -85,20 +105,24 @@ if (USE_MOCK) {
                 return res.status(400).json({ error: "query is required" });
             }
 
-      // ── 새 프롬프트 ──
-      const systemPrompt = `
+            // ── 새 프롬프트 ──
+            const systemPrompt = `
 You are a senior colorist for data-viz dashboards. 
 Follow color theory rigorously and keep palettes semantically aligned to the given keyword.
 Respond with ONLY a JSON array of HEX (e.g., ["#112233","#AABBCC"]) and nothing else. No prose.
 `.trim();
 
-      const userPrompt = `
+            const userPrompt = `
 Goal → Return a ${paletteType} palette of ${n} HEX colors for charts on a dark UI.
 
 Context:
 - Keyword (semantic theme): "${String(query)}"
+<<<<<<< HEAD
 - Dashboard background: "${backgroundColor}"
 If background is unknown or invalid, assume dark gray (#111827).
+=======
+- Dashboard background: "${chartBgc}"
+>>>>>>> main
 - Preferred key color: "${keyColor ? String(keyColor) : "none"}"
 
 Step 0 — Language normalization & domain mapping (execute BEFORE all other rules; this step has priority over later rules):

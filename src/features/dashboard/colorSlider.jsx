@@ -6,7 +6,7 @@ const ColorSlider = () => {
     useEffect(() => {
         const slider = sliderRef.current;
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 21; i++) {
             const block = document.createElement("div");
             block.className = "color-block";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
@@ -13,15 +13,17 @@ export default function DoughnutChart({
         "#444444",
         "#202020ff",
     ],
-    // dataValues = [50, 65, 80, 40, 75, 100],
-    // labels = ["A", "B", "C", "D", "E", "F"],
-    dataCount = 3,
+    dataCount = 6, //props 오류방지 기본값
 }) {
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);
 
-    const dataValues = Array.from(
-        { length: dataCount },
-        () => Math.floor(Math.random() * 20) + 10
+    // const dataValues = Array.from(
+    //     { length: dataCount },
+    //     () => Math.floor(Math.random() * 20) + 10
+    // );
+
+    const [dataValues] = useState(() =>
+        Array.from({ length: 6 }, () => Math.floor(Math.random() * 20) + 10)
     );
     const data = {
         labels: labels,
@@ -41,7 +43,13 @@ export default function DoughnutChart({
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: { position: "bottom" },
+            legend: {
+                position: "bottom",
+            },
+            datalabels: {
+                anchor: "end", // 'start', 'center', 'end'로 위치 조정
+                align: "end", // 'start', 'center', 'end'로 위치 조정
+            },
         },
         cutout: "60%",
     };

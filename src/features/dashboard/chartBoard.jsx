@@ -1,6 +1,5 @@
-// src/features/dashboard/chartBoard.jsx
 import React, { useState } from "react";
-import BarChart from "./chart/barChart";
+import BarChart from "./chart/barchart";
 import DoughnutChart from "./chart/doughnutChart";
 import LineChart from "./chart/lineChart";
 import PieChart from "./chart/pieChart";
@@ -97,6 +96,11 @@ const ChartBoard = ({
                         onDragLeave={handleDragLeave}
                         onDrop={(e) => handleDrop(e, i)}
                         onClick={() => handleSlotClick(i)}
+                        style={{
+                            backgroundColor:
+                                // slots[i]?.settings?.backgroundColor || "#fff",
+                                slots[i]?.settings?.chartBgc,
+                        }}
                     >
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
                         <div className="chart-canvas">
