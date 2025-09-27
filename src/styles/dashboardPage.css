@@ -113,7 +113,7 @@
     box-sizing: border-box;
 }
 
-.board-title {
+.chart-board .board-title {
     font-size: 50px;
     font-weight: 700;
     text-align: center;
@@ -124,7 +124,7 @@
     /* background-color: #f9f9f9; */
 }
 
-.boards {
+.chart-board .boards {
     height: 68vh;
     width: 100%;
     display: grid;
@@ -133,7 +133,7 @@
     gap: 1.5vh 1vw;
 }
 
-.chart-item {
+.chart-board .chart-item {
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -146,15 +146,15 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
     background-color: #ffffff;
-    box-shadow: 3px 3px 4px rgba(204, 204, 204, 0.5); /* 그림자 효과 */
+    box-shadow: 3px 3px 4px rgba(204, 204, 204, 0.5);
 }
 
-.chart-item.selected {
-    border: 2px solid #505050;
+.chart-board .chart-item.selected {
+    border: 1px solid #505050;
     box-shadow: 0 0 10px rgba(121, 121, 121, 0.5); /* 그림자 효과 */
 }
 
-.chart-item.drag-over {
+.chart-board .chart-item.drag-over {
     border-color: rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.08);
 }
@@ -203,14 +203,14 @@
     display: flex;
     flex-direction: column;
     gap: 1.5vh;
-    padding: 2vh 1.5vw;
-    background-color: #f0f0f0;
-    font-size: 17pt;
+    padding: 3vh 3vw 0 2vw;
+    background-color: #f8f8f8;
+    font-size: 14pt;
 }
 .section {
     display: flex;
     flex-direction: column;
-    gap: 1vh;
+    gap: 5px;
     /* margin-bottom: 20px; */
 }
 .attribute-options {
@@ -228,6 +228,7 @@
     border-radius: 6px;
     border: 1px solid #aaa;
     background-color: #ffffff;
+    font-size: 11pt;
     cursor: pointer;
 }
 

@@ -5,13 +5,13 @@ import { Button } from "@mui/material";
 //props 추가됨(slot, setSlots, selectedSlotIndex)
 const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     // 기본값 지정
-    // 속성 기본값 1에서 null 로 변경
     const [attributeCount, setAttributeCount] = useState(null);
     const [emphasisAttr, setEmphasisAttr] = useState(null);
-    const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+    const [chartBgc, setChartBgc] = useState("#ffffff");
+    const [boardBgc, setBoardBgc] = useState("#ffffff");
     const [keyColor, setKeyColor] = useState("#000000");
 
-    //배경색, 키컬러 히스토리 초기값
+    //차트배경색, 보드배경색, 키컬러 히스토리 초기값
     const [bgHistory, setBgHistory] = useState([
         "#ffffff",
         "#ffffff",
@@ -19,6 +19,15 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         "#ffffff",
         "#ffffff",
     ]);
+
+    const [boardBgHistory, setBoardBgHistory] = useState([
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+        "#ffffff",
+    ]);
+
     const [keyHistory, setKeyHistory] = useState([
         "#ffffff",
         "#ffffff",
@@ -36,6 +45,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     const [loading, setLoading] = useState(false);
 
     const [tempBg, setTempBg] = useState("#ffffff");
+    const [tempBoardBg, setTempBoardBg] = useState("#ffffff");
     const [tempKey, setTempKey] = useState("#000000");
 
     //selectedSlotIndex 변경 시 상태 초기화/업데이트
@@ -45,14 +55,16 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             const {
                 attributeCount,
                 emphasisAttr,
-                backgroundColor,
+                chartBgc,
+                boardBgc,
                 keyColor,
                 colors,
                 keyword,
             } = currentSlot.settings;
             setAttributeCount(attributeCount ?? 0);
             setEmphasisAttr(emphasisAttr ?? 0);
-            setBackgroundColor(backgroundColor ?? "#ffffff");
+            setChartBgc(chartBgc ?? "#ffffff");
+            setBoardBgc(boardBgc ?? "#ffffff");
             setKeyColor(keyColor ?? "#ffffff");
             setColors(colors ?? []);
             setKeyword(keyword ?? "");
@@ -60,7 +72,8 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
             setAttributeCount(0);
             setEmphasisAttr(0);
-            setBackgroundColor("#ffffff");
+            setChartBgc("#ffffff");
+            setBoardBgc("#ffffff");
             setKeyColor("#ffffff");
             setColors([]);
             setKeyword("");
@@ -76,7 +89,8 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         const payload = {
             attributeCount: attributeCount ?? 1,
             emphasisAttr: emphasisAttr ?? 1,
-            backgroundColor,
+            chartBgc,
+            boardBgc,
             keyColor,
             keyword,
             colors,
@@ -111,7 +125,8 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     const handleReset = () => {
         setAttributeCount(1);
         setEmphasisAttr(1);
-        setBackgroundColor("#ffffff");
+        setChartBgc("#ffffff");
+        setBoardBgc("#ffffff");
         setKeyColor("#ffffff");
         setKeyword("");
         setColors([]);
@@ -120,7 +135,7 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
     // 실시간 미리보기만 반영(컬러피커 버튼에만 반영,히스토리는 추가 X)
     const onChangeBackgroundLive = (hex) => {
         setTempBg(hex);
-        setBackgroundColor(hex);
+        setChartBgc(hex);
     };
 
     // 컬러피커 닫힐 때 최종 선택만 히스토리에 1회 기록
@@ -132,6 +147,24 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         });
     };
 
+    //보드배경
+    const onChangeBoardBgcLive = (hex) => {
+        setTempBoardBg(hex);
+        setBoardBgc(hex);
+    };
+
+    const onBoardBgcPickerClose = () => {
+        setBoardBgHistory((prev) => {
+            if (prev[0] === tempBoardBg) return prev; // 같은 색이면 스킵
+            const next = [
+                tempBoardBg,
+                ...prev.filter((c) => c !== tempBoardBg),
+            ];
+            return next.slice(0, 5);
+        });
+    };
+
+    //키컬러
     const onChangeKeyColorLive = (hex) => {
         setTempKey(hex);
         setKeyColor(hex);
@@ -240,13 +273,13 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             </div>
 
             <div className="section backgrounds-color">
-                <label>배경색</label>
+                <label>차트 배경색</label>
                 <div className="color-options">
                     <input
                         type="color"
                         className="color-choicer"
                         aria-label="배경색 선택"
-                        value={backgroundColor}
+                        value={chartBgc}
                         onChange={(e) => onChangeBackgroundLive(e.target.value)}
                         onBlur={onBackgroundPickerClose}
                     />
@@ -259,7 +292,33 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
                             title={hex}
                             aria-label={`히스토리 색상 ${hex}`}
                             style={{ background: hex }}
-                            onClick={() => setBackgroundColor(hex)} // 클릭하면 다시 적용 (선택)
+                            onClick={() => setChartBgc(hex)} // 클릭하면 다시 적용 (선택)
+                        />
+                    ))}
+                </div>
+            </div>
+
+            <div className="section backgrounds-color">
+                <label>차트보드 배경색</label>
+                <div className="color-options">
+                    <input
+                        type="color"
+                        className="color-choicer"
+                        aria-label="배경색 선택"
+                        value={boardBgc}
+                        onChange={(e) => onChangeBoardBgcLive(e.target.value)}
+                        onBlur={onBoardBgcPickerClose}
+                    />
+
+                    {boardBgHistory.map((hex, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            className="history-swatch"
+                            title={hex}
+                            aria-label={`히스토리 색상 ${hex}`}
+                            style={{ background: hex }}
+                            onClick={() => setBoardBgc(hex)} // 클릭하면 다시 적용 (선택)
                         />
                     ))}
                 </div>

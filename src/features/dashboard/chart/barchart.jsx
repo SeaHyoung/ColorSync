@@ -39,10 +39,7 @@ export default function BarChart({
     //     () => Math.floor(Math.random() * 20) + 10
     // );
     const [dataValues] = useState(() =>
-        Array.from(
-            { length: dataCount },
-            () => Math.floor(Math.random() * 20) + 10
-        )
+        Array.from({ length: 6 }, () => Math.floor(Math.random() * 20) + 10)
     );
 
     const labels = Array.from({ length: dataCount }, (_, i) => `${i + 1}`);

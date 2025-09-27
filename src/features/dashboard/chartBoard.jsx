@@ -99,6 +99,7 @@ const ChartBoard = ({
                         style={{
                             backgroundColor:
                                 slots[i]?.settings?.backgroundColor || "#fff",
+                            // slots[i]?.settings?.backgroundColor,
                         }}
                     >
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
