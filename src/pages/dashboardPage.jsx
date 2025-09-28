@@ -12,6 +12,7 @@ import "../styles/dashboardPage.css"; // CSS는 styles 폴더에서 관리 추�
 export default function dashboardPage() {
     const [slots, setSlots] = useState(Array(6).fill(null));
     const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
+    const [palette, setPalette] = useState([]);
 
     return (
         <div className="dashboard-container">
@@ -25,11 +26,25 @@ export default function dashboardPage() {
                     selectedSlotIndex={selectedSlotIndex}
                     setSelectedSlotIndex={setSelectedSlotIndex}
                 />
-                <ColorSlider />
+                {/*/!* <ColorSlider /> *!/*/}
+                {/*<SettingBoard*/}
+                {/*    slots={slots}*/}
+                {/*    setSlots={setSlots}*/}
+                {/*    selectedSlotIndex={selectedSlotIndex}*/}
+                {/*/>*/}
+                {/* ✅ 추천 팔레트 슬라이더 */}
+                <ColorSlider
+                    colors={palette}
+                    stepsPerPair={4} // 이웃 색 사이 중간 단계(3~5 권장)
+                    onColorClick={(hex) => navigator.clipboard.writeText(hex)}
+                />
+
+                {/* ✅ SettingBoard에서 추천 받으면 setPalette로 올림 */}
                 <SettingBoard
                     slots={slots}
                     setSlots={setSlots}
                     selectedSlotIndex={selectedSlotIndex}
+                    onPaletteChange={setPalette}
                 />
             </div>
         </div>

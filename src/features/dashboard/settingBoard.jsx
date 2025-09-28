@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button } from "@mui/material";
 
 //props 추가됨(slot, setSlots, selectedSlotIndex)
-const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
+const SettingBoard = ({ slots, setSlots, selectedSlotIndex, onPaletteChange }) => {
     // 기본값 지정
     const [attributeCount, setAttributeCount] = useState(null);
     const [emphasisAttr, setEmphasisAttr] = useState(null);
@@ -66,7 +66,9 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             setChartBgc(chartBgc ?? "#ffffff");
             setBoardBgc(boardBgc ?? "#ffffff");
             setKeyColor(keyColor ?? "#ffffff");
-            setColors(colors ?? []);
+            if (Array.isArray(colors) && colors.length > 0) {
+               setColors(colors);
+            }
             setKeyword(keyword ?? "");
         } else {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
@@ -75,10 +77,12 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
             setChartBgc("#ffffff");
             setBoardBgc("#ffffff");
             setKeyColor("#ffffff");
-            setColors([]);
-            setKeyword("");
         }
     }, [selectedSlotIndex, slots]);
+
+    useEffect(() => {
+        onPaletteChange?.(colors || []);
+    }, [colors, onPaletteChange]);
 
     // 적용 버튼 클릭 핸들러
     const handleApply = async () => {
@@ -186,11 +190,17 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex }) => {
         }
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/palette", {
-                query: keyword,
-                n: 6,
-            });
-            setColors(data.colors || []);
+            // const { data } = await axios.post("/api/palette", {
+            //     query: keyword,
+            //     n: 6,
+            // });
+            // setColors(data.colors || []);
+             const text = (keyword || "").trim();
+             const { data } = await axios.post("http://localhost:5050/api/palette", { query: text, n: 6 });
+             const list = Array.isArray(data?.colors) ? data.colors.slice(0, 6) : [];
+             setColors(list);
+             onPaletteChange?.(list);
+
         } catch (e) {
             const msg =
                 e?.response?.data?.error ||
