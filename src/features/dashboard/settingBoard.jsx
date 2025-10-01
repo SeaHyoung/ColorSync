@@ -3,7 +3,12 @@ import axios from "axios";
 import { Button } from "@mui/material";
 
 //props 추가됨(slot, setSlots, selectedSlotIndex)
-const SettingBoard = ({ slots, setSlots, selectedSlotIndex, onPaletteChange }) => {
+const SettingBoard = ({
+    slots,
+    setSlots,
+    selectedSlotIndex,
+    onPaletteChange,
+}) => {
     // 기본값 지정
     const [attributeCount, setAttributeCount] = useState(null);
     const [emphasisAttr, setEmphasisAttr] = useState(null);
@@ -63,20 +68,20 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex, onPaletteChange }) =
             } = currentSlot.settings;
             setAttributeCount(attributeCount ?? 0);
             setEmphasisAttr(emphasisAttr ?? 0);
-            setChartBgc(chartBgc ?? "#ffffff");
+            setChartBgc(chartBgc ?? "none");
             setBoardBgc(boardBgc ?? "#ffffff");
             setKeyColor(keyColor ?? "#ffffff");
             if (Array.isArray(colors) && colors.length > 0) {
-               setColors(colors);
+                setColors(colors);
             }
             setKeyword(keyword ?? "");
         } else {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
             setAttributeCount(0);
             setEmphasisAttr(0);
-            setChartBgc("#ffffff");
-            setBoardBgc("#ffffff");
-            setKeyColor("#ffffff");
+            setChartBgc("none");
+            setBoardBgc("none");
+            setKeyColor("none");
         }
     }, [selectedSlotIndex, slots]);
 
@@ -195,12 +200,16 @@ const SettingBoard = ({ slots, setSlots, selectedSlotIndex, onPaletteChange }) =
             //     n: 6,
             // });
             // setColors(data.colors || []);
-             const text = (keyword || "").trim();
-             const { data } = await axios.post("http://localhost:5050/api/palette", { query: text, n: 6 });
-             const list = Array.isArray(data?.colors) ? data.colors.slice(0, 6) : [];
-             setColors(list);
-             onPaletteChange?.(list);
-
+            const text = (keyword || "").trim();
+            const { data } = await axios.post(
+                "http://localhost:5050/api/palette",
+                { query: text, n: 6 }
+            );
+            const list = Array.isArray(data?.colors)
+                ? data.colors.slice(0, 6)
+                : [];
+            setColors(list);
+            onPaletteChange?.(list);
         } catch (e) {
             const msg =
                 e?.response?.data?.error ||

@@ -1,10 +1,8 @@
-// src/pages/dashboardPage.jsx
 import React, { useState } from "react";
-// import React from "react";
 import Nev from "../features/dashboard/nav";
 import ChartTypeSelector from "../features/dashboard/chartTypeSelector";
 import ChartBoard from "../features/dashboard/chartBoard";
-import ColorSlider from "../features/dashboard/colorSlider";
+import ColorChip from "../features/dashboard/colorChip";
 import SettingBoard from "../features/dashboard/settingBoard";
 
 import "../styles/dashboardPage.css"; // CSS는 styles 폴더에서 관리 추천
@@ -26,20 +24,12 @@ export default function dashboardPage() {
                     selectedSlotIndex={selectedSlotIndex}
                     setSelectedSlotIndex={setSelectedSlotIndex}
                 />
-                {/*/!* <ColorSlider /> *!/*/}
-                {/*<SettingBoard*/}
-                {/*    slots={slots}*/}
-                {/*    setSlots={setSlots}*/}
-                {/*    selectedSlotIndex={selectedSlotIndex}*/}
-                {/*/>*/}
-                {/* ✅ 추천 팔레트 슬라이더 */}
-                <ColorSlider
+                <ColorChip
                     colors={palette}
                     stepsPerPair={4} // 이웃 색 사이 중간 단계(3~5 권장)
                     onColorClick={(hex) => navigator.clipboard.writeText(hex)}
                 />
 
-                {/* ✅ SettingBoard에서 추천 받으면 setPalette로 올림 */}
                 <SettingBoard
                     slots={slots}
                     setSlots={setSlots}
