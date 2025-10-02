@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button } from "@mui/material";
+import ColorPicker from "./colorPicker.jsx";
 
 //props 추가됨(slot, setSlots, selectedSlotIndex)
 const SettingBoard = ({
@@ -14,7 +14,7 @@ const SettingBoard = ({
     const [emphasisAttr, setEmphasisAttr] = useState(null);
     const [chartBgc, setChartBgc] = useState("#ffffff");
     const [boardBgc, setBoardBgc] = useState("#ffffff");
-    const [keyColor, setKeyColor] = useState("#000000");
+    const [keyColor, setKeyColor] = useState("#ffffff");
 
     //차트배경색, 보드배경색, 키컬러 히스토리 초기값
     const [bgHistory, setBgHistory] = useState([
@@ -277,15 +277,25 @@ const SettingBoard = ({
             <div className="section backgrounds-color">
                 <label>차트 배경색</label>
                 <div className="color-options">
-                    <input
-                        type="color"
-                        className="color-choicer"
-                        aria-label="배경색 선택"
-                        value={chartBgc}
-                        onChange={(e) => onChangeBackgroundLive(e.target.value)}
-                        onBlur={onBackgroundPickerClose}
-                    />
 
+                    {/*기존 컬러피커*/}
+                    {/*<input*/}
+                    {/*    type="color"*/}
+                    {/*    className="color-choicer"*/}
+                    {/*    aria-label="배경색 선택"*/}
+                    {/*    value={chartBgc}*/}
+                    {/*    onChange={(e) => onChangeBackgroundLive(e.target.value)}*/}
+                    {/*    onBlur={onBackgroundPickerClose}*/}
+                    {/*/>*/}
+
+
+                    {/*교체한 컬러피커*/}
+                    <ColorPicker
+                        label="차트 배경색"
+                        value={chartBgc}
+                        onChange={onChangeBackgroundLive}
+                        onClose={onBackgroundPickerClose}
+                    />
                     {bgHistory.map((hex, i) => (
                         <button
                             key={i}
@@ -302,15 +312,21 @@ const SettingBoard = ({
             <div className="section backgrounds-color">
                 <label>차트보드 배경색</label>
                 <div className="color-options">
-                    <input
-                        type="color"
-                        className="color-choicer"
-                        aria-label="배경색 선택"
+                    {/*<input*/}
+                    {/*    type="color"*/}
+                    {/*    className="color-choicer"*/}
+                    {/*    aria-label="배경색 선택"*/}
+                    {/*    value={boardBgc}*/}
+                    {/*    onChange={(e) => onChangeBoardBgcLive(e.target.value)}*/}
+                    {/*    onBlur={onBoardBgcPickerClose}*/}
+                    {/*/>*/}
+                    {/* 🔴 교체 */}
+                    <ColorPicker
+                        label="차트보드 배경색"
                         value={boardBgc}
-                        onChange={(e) => onChangeBoardBgcLive(e.target.value)}
-                        onBlur={onBoardBgcPickerClose}
+                        onChange={onChangeBoardBgcLive}
+                        onClose={onBoardBgcPickerClose}
                     />
-
                     {boardBgHistory.map((hex, i) => (
                         <button
                             key={i}
@@ -356,15 +372,22 @@ const SettingBoard = ({
                 <div className="section keycolors">
                     <label>키 컬러</label>
                     <div className="color-options">
-                        <input
-                            type="color"
-                            className="color-choicer"
-                            aria-label="키 컬러 선택"
+                        {/*<input*/}
+                        {/*    type="color"*/}
+                        {/*    className="color-choicer"*/}
+                        {/*    aria-label="키 컬러 선택"*/}
+                        {/*    value={keyColor}*/}
+                        {/*    onChange={(e) =>*/}
+                        {/*        onChangeKeyColorLive(e.target.value)*/}
+                        {/*    }*/}
+                        {/*    onBlur={onKeyPickerClose}*/}
+                        {/*/>*/}
+
+                        <ColorPicker
+                            // label="키 컬러"
                             value={keyColor}
-                            onChange={(e) =>
-                                onChangeKeyColorLive(e.target.value)
-                            }
-                            onBlur={onKeyPickerClose}
+                            onChange={onChangeKeyColorLive}
+                            onClose={onKeyPickerClose}
                         />
                         {keyHistory.map((hex, i) => (
                             <button
