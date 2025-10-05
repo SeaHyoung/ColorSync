@@ -12,6 +12,7 @@ import TreeMapChart from "./chart/treeMapChart";
 const ChartBoard = ({
     slots,
     setSlots,
+    boardBgc,
     selectedSlotIndex,
     setSelectedSlotIndex,
 }) => {
@@ -76,7 +77,7 @@ const ChartBoard = ({
         setBoardTitle(e.target.value);
     };
     return (
-        <div className="chart-board">
+        <div className="chart-board" style={{ backgroundColor: boardBgc }}>
             {/* 차트보드 타이틀 */}
             <input
                 className="board-title"

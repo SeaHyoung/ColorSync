@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, memo } from "react";
-import { Button, Popover, TextField, IconButton, InputAdornment } from "@mui/material";
+import {
+    Button,
+    Popover,
+    TextField,
+    IconButton,
+    InputAdornment,
+} from "@mui/material";
 import { HexColorPicker } from "react-colorful";
 
 function normalizeHex(s) {
@@ -23,11 +29,11 @@ function getContrastColor(hx) {
 }
 
 function ColorPickerBase({
-                             value = "#ffffff",
-                             onChange,
-                             onClose,
-                             disabled = false,
-                         }) {
+    value = "#ffffff",
+    onChange,
+    onClose,
+    disabled = false,
+}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [hex, setHex] = useState(value);
     const inputRef = useRef(null);
@@ -68,7 +74,7 @@ function ColorPickerBase({
             <Button
                 onClick={handleOpen}
                 disabled={disabled}
-                className="cs-swatch"                       // ← 고유 클래스 부여
+                className="cs-swatch" // ← 고유 클래스 부여
                 sx={{
                     minWidth: 40,
                     width: 40,
@@ -112,13 +118,21 @@ function ColorPickerBase({
                     margin="dense"
                     placeholder="#RRGGBB"
                     error={hex && !isValidHex6(normalizeHex(hex))}
-                    helperText={hex && !isValidHex6(normalizeHex(hex)) ? "예: #12abef" : " "}
+                    helperText={
+                        hex && !isValidHex6(normalizeHex(hex))
+                            ? "예: #12abef"
+                            : " "
+                    }
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label="HEX 복사"
-                                    onClick={() => navigator.clipboard.writeText(normalizeHex(hex))}
+                                    onClick={() =>
+                                        navigator.clipboard.writeText(
+                                            normalizeHex(hex)
+                                        )
+                                    }
                                     size="small"
                                 >
                                     📋
@@ -128,7 +142,13 @@ function ColorPickerBase({
                     }}
                 />
 
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: 8,
+                    }}
+                >
                     <Button size="small" onClick={handleClose}>
                         닫기
                     </Button>

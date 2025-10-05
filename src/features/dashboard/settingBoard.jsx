@@ -6,15 +6,22 @@ import ColorPicker from "./colorPicker.jsx";
 const SettingBoard = ({
     slots,
     setSlots,
+    boardBgc,
+    setBoardBgc,
     selectedSlotIndex,
     onPaletteChange,
 }) => {
     // 기본값 지정
-    const [attributeCount, setAttributeCount] = useState(null);
     const [emphasisAttr, setEmphasisAttr] = useState(null);
-    const [chartBgc, setChartBgc] = useState("#ffffff");
-    const [boardBgc, setBoardBgc] = useState("#ffffff");
     const [keyColor, setKeyColor] = useState("#ffffff");
+    // const [attributeCount, setAttributeCount] = useState(null);
+    // const [chartBgc, setChartBgc] = useState("#ffffff");
+
+    // chartBgc는 컬러 피커의 임시 상태(tempBgc)로 대체 가능
+    const currentAttributeCount =
+        slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 1;
+    const currentChartBgc =
+        slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "#ffffff";
 
     //차트배경색, 보드배경색, 키컬러 히스토리 초기값
     const [bgHistory, setBgHistory] = useState([
@@ -49,7 +56,7 @@ const SettingBoard = ({
     const [colors, setColors] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const [tempBg, setTempBg] = useState("#ffffff");
+    const [tempBgc, settempBgc] = useState("#ffffff");
     const [tempBoardBg, setTempBoardBg] = useState("#ffffff");
     const [tempKey, setTempKey] = useState("#000000");
 
@@ -61,15 +68,13 @@ const SettingBoard = ({
                 attributeCount,
                 emphasisAttr,
                 chartBgc,
-                boardBgc,
                 keyColor,
                 colors,
                 keyword,
             } = currentSlot.settings;
-            setAttributeCount(attributeCount ?? 0);
+            // setAttributeCount(attributeCount ?? 0);
+            // setChartBgc(chartBgc ?? "none");
             setEmphasisAttr(emphasisAttr ?? 0);
-            setChartBgc(chartBgc ?? "none");
-            setBoardBgc(boardBgc ?? "#ffffff");
             setKeyColor(keyColor ?? "#ffffff");
             if (Array.isArray(colors) && colors.length > 0) {
                 setColors(colors);
@@ -77,10 +82,10 @@ const SettingBoard = ({
             setKeyword(keyword ?? "");
         } else {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
-            setAttributeCount(0);
-            setEmphasisAttr(0);
-            setChartBgc("none");
+            // setAttributeCount(0);
+            // setChartBgc("none");
             setBoardBgc("none");
+            setEmphasisAttr(0);
             setKeyColor("none");
         }
     }, [selectedSlotIndex, slots]);
@@ -89,6 +94,28 @@ const SettingBoard = ({
         onPaletteChange?.(colors || []);
     }, [colors, onPaletteChange]);
 
+    // 적용버튼 없이 자동업데이트(속성수, chartBgc, boardBgc)
+    const updateSlotSetting = (key, value) => {
+        if (selectedSlotIndex == null) {
+            console.warn("적용할 차트 슬롯을 선택하세요.");
+            return;
+        }
+
+        setSlots((prev) => {
+            const next = [...prev];
+            if (next[selectedSlotIndex]) {
+                next[selectedSlotIndex] = {
+                    ...next[selectedSlotIndex],
+                    settings: {
+                        ...(next[selectedSlotIndex].settings || {}),
+                        [key]: value, // 해당 슬롯의 특정 'key' 설정을 'value'로 업데이트
+                    },
+                };
+            }
+            return next;
+        });
+    };
+
     // 적용 버튼 클릭 핸들러
     const handleApply = async () => {
         if (selectedSlotIndex == null) {
@@ -96,10 +123,12 @@ const SettingBoard = ({
             return;
         }
         const payload = {
-            attributeCount: attributeCount ?? 1,
-            emphasisAttr: emphasisAttr ?? 1,
-            chartBgc,
+            // attributeCount: attributeCount ?? 1,
+            attributeCount: currentAttributeCount,
+            // chartBgc,
+            chartBgc: currentChartBgc,
             boardBgc,
+            emphasisAttr: emphasisAttr ?? 1,
             keyColor,
             keyword,
             colors,
@@ -132,9 +161,9 @@ const SettingBoard = ({
     };
 
     const handleReset = () => {
-        setAttributeCount(1);
+        // setAttributeCount(1);
+        // setChartBgc("#ff ffff");
         setEmphasisAttr(1);
-        setChartBgc("#ffffff");
         setBoardBgc("#ffffff");
         setKeyColor("#ffffff");
         setKeyword("");
@@ -143,15 +172,16 @@ const SettingBoard = ({
 
     // 실시간 미리보기만 반영(컬러피커 버튼에만 반영,히스토리는 추가 X)
     const onChangeBackgroundLive = (hex) => {
-        setTempBg(hex);
-        setChartBgc(hex);
+        settempBgc(hex);
+        // setChartBgc(hex);
+        updateSlotSetting("chartBgc", hex);
     };
 
     // 컬러피커 닫힐 때 최종 선택만 히스토리에 1회 기록
     const onBackgroundPickerClose = () => {
         setBgHistory((prev) => {
-            if (prev[0] === tempBg) return prev; // 같은 색이면 스킵
-            const next = [tempBg, ...prev.filter((c) => c !== tempBg)];
+            if (prev[0] === tempBgc) return prev; // 같은 색이면 스킵
+            const next = [tempBgc, ...prev.filter((c) => c !== tempBgc)];
             return next.slice(0, 5);
         });
     };
@@ -195,11 +225,6 @@ const SettingBoard = ({
         }
         setLoading(true);
         try {
-            // const { data } = await axios.post("/api/palette", {
-            //     query: keyword,
-            //     n: 6,
-            // });
-            // setColors(data.colors || []);
             const text = (keyword || "").trim();
             const { data } = await axios.post(
                 "http://localhost:5050/api/palette",
@@ -266,8 +291,14 @@ const SettingBoard = ({
                         <button
                             type="button"
                             key={n}
-                            onClick={() => setAttributeCount(n)}
-                            className={attributeCount === n ? "selected" : ""}
+                            // onClick={() => setAttributeCount(n)}
+                            onClick={() =>
+                                updateSlotSetting("attributeCount", n)
+                            }
+                            // className={attributeCount === n ? "selected" : ""}
+                            className={
+                                currentAttributeCount === n ? "selected" : ""
+                            }
                         >
                             {n}
                         </button>
@@ -277,22 +308,9 @@ const SettingBoard = ({
             <div className="section backgrounds-color">
                 <label>차트 배경색</label>
                 <div className="color-options">
-
-                    {/*기존 컬러피커*/}
-                    {/*<input*/}
-                    {/*    type="color"*/}
-                    {/*    className="color-choicer"*/}
-                    {/*    aria-label="배경색 선택"*/}
-                    {/*    value={chartBgc}*/}
-                    {/*    onChange={(e) => onChangeBackgroundLive(e.target.value)}*/}
-                    {/*    onBlur={onBackgroundPickerClose}*/}
-                    {/*/>*/}
-
-
-                    {/*교체한 컬러피커*/}
                     <ColorPicker
                         label="차트 배경색"
-                        value={chartBgc}
+                        value={tempBgc} // chartBgc > tempBgc(임시상태)로 변경
                         onChange={onChangeBackgroundLive}
                         onClose={onBackgroundPickerClose}
                     />
@@ -312,15 +330,6 @@ const SettingBoard = ({
             <div className="section backgrounds-color">
                 <label>차트보드 배경색</label>
                 <div className="color-options">
-                    {/*<input*/}
-                    {/*    type="color"*/}
-                    {/*    className="color-choicer"*/}
-                    {/*    aria-label="배경색 선택"*/}
-                    {/*    value={boardBgc}*/}
-                    {/*    onChange={(e) => onChangeBoardBgcLive(e.target.value)}*/}
-                    {/*    onBlur={onBoardBgcPickerClose}*/}
-                    {/*/>*/}
-                    {/* 🔴 교체 */}
                     <ColorPicker
                         label="차트보드 배경색"
                         value={boardBgc}
@@ -351,38 +360,11 @@ const SettingBoard = ({
                         // onKeyDown={handleKeywordKeyDown}
                         className="keyword-input"
                     />
-                    {/* <div className="tags">
-                        {tags.map((t) => (
-                            <span key={t.id} className="tag">
-                                <span className="tag-text">{t.label}</span>
-                                <button
-                                    type="button"
-                                    className="tag-remove"
-                                    aria-label={`${t.label} 삭제`}
-                                    onClick={() => removeTag(t.id)}
-                                    title="태그 삭제"
-                                >
-                                    ×
-                                </button>
-                            </span>
-                        ))}
-                    </div> */}
                 </div>
 
                 <div className="section keycolors">
                     <label>키 컬러</label>
                     <div className="color-options">
-                        {/*<input*/}
-                        {/*    type="color"*/}
-                        {/*    className="color-choicer"*/}
-                        {/*    aria-label="키 컬러 선택"*/}
-                        {/*    value={keyColor}*/}
-                        {/*    onChange={(e) =>*/}
-                        {/*        onChangeKeyColorLive(e.target.value)*/}
-                        {/*    }*/}
-                        {/*    onBlur={onKeyPickerClose}*/}
-                        {/*/>*/}
-
                         <ColorPicker
                             // label="키 컬러"
                             value={keyColor}
@@ -431,11 +413,6 @@ const SettingBoard = ({
                 <div className="section recommend">
                     <label>추천 컬러</label>
                     <div className="result-color-wrap">
-                        {/* {colors.length === 0 && (
-                            <div style={{ opacity: 0.6 }}>
-                                키워드 입력 후 Enter 또는 “추천 받기” 클릭
-                            </div>
-                        )} */}
                         {colors.map((hex, i) => (
                             <button
                                 key={i}

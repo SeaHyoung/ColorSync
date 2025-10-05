@@ -11,6 +11,7 @@ export default function dashboardPage() {
     const [slots, setSlots] = useState(Array(6).fill(null));
     const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
     const [palette, setPalette] = useState([]);
+    const [boardBgc, setBoardBgc] = useState("#ffffff");
 
     return (
         <div className="dashboard-container">
@@ -21,6 +22,7 @@ export default function dashboardPage() {
                 <ChartBoard
                     slots={slots}
                     setSlots={setSlots}
+                    boardBgc={boardBgc}
                     selectedSlotIndex={selectedSlotIndex}
                     setSelectedSlotIndex={setSelectedSlotIndex}
                 />
@@ -33,6 +35,8 @@ export default function dashboardPage() {
                 <SettingBoard
                     slots={slots}
                     setSlots={setSlots}
+                    boardBgc={boardBgc}
+                    setBoardBgc={setBoardBgc}
                     selectedSlotIndex={selectedSlotIndex}
                     onPaletteChange={setPalette}
                 />

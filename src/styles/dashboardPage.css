@@ -108,7 +108,7 @@
     width: 100%;
     padding: 0 1vw;
     box-sizing: border-box;
-    /* background-color: #4f41af; */
+    /* background-color: #060030; */
 }
 
 .chart-board .board-title {
@@ -119,6 +119,8 @@
     width: 100%;
     margin-bottom: 2vh;
     line-height: 8vh;
+    background-color: transparent;
+    /* color: #ffffff; */
 }
 
 .chart-board .boards {
@@ -143,7 +145,7 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     cursor: pointer;
     /* background-color: #ffffff; */
-    box-shadow: 3px 3px 4px rgba(204, 204, 204, 0.5);
+    box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chart-board .chart-item.selected {
