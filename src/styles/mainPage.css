@@ -46,22 +46,22 @@
 }
 
 .main-title {
-    font-size: 150px;
+    font-size: 100px;
     font-weight: 800;
     margin-bottom: 40px;
 }
 
 .sub-title {
-    /* font-size: 35px; */
-    color: #cceaff;
+    font-size: 35px;
+    color: #dcf1ff;
     padding-left: 20px;
     margin-bottom: 60px;
 }
 
 .start {
-    /* font-size: 35px; */
+    font-size: 35px;
     padding-left: 20px;
-    color: #00e0ff;
+    color: #302c44;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -102,4 +102,72 @@
 }
 .login-form {
     padding: 40vh 10vw;
+}
+
+/* --------------- */
+.dynamic-waves-bg {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+    /* background: radial-gradient(circle at 50% 50%, #a1d8ff, #e0f3ff); */
+}
+
+/* 공통 blob 설정 */
+.blob {
+    position: absolute;
+    width: 100vmax; /* 조금 더 크게 */
+    height: 100vmax;
+    border-radius: 50%;
+    filter: blur(180px);
+    opacity: 0.65;
+    mix-blend-mode: screen;
+    animation: move 25s ease-in-out infinite alternate,
+        hueShift 10s linear infinite;
+}
+
+/* 개별 blob 위치 */
+.blob1 {
+    top: -20%;
+    left: -10%;
+    background: radial-gradient(circle at 50% 30%, #30bbce, #070731);
+    animation-delay: 0s, 0s;
+}
+.blob2 {
+    top: 20%;
+    left: 45%;
+    background: radial-gradient(circle at 50% 60%, #e96cce, #29da64);
+    animation-delay: 5s, 2s;
+}
+.blob3 {
+    top: 40%;
+    left: -20%;
+    background: radial-gradient(circle at 60% 80%, #499eff, #fcff41);
+    animation-delay: 10s, 4s;
+}
+
+/* 부드러운 부유 애니메이션 */
+@keyframes move {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(5%, -10%) scale(1.1);
+    }
+    100% {
+        transform: translate(-5, 10%) scale(1);
+    }
+}
+
+/* 색상 변화 효과 */
+@keyframes hueShift {
+    0% {
+        filter: blur(70px) hue-rotate(0deg);
+    }
+    50% {
+        filter: blur(90px) hue-rotate(90deg);
+    }
+    100% {
+        filter: blur(70px) hue-rotate(360deg);
+    }
 }

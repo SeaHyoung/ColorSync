@@ -3,8 +3,8 @@ import SlidePanel from "../features/main/slidePanel";
 import LoginForm from "../features/main/loginForm";
 import JoinForm from "../features/main/joinForm";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../assets/background.png";
-import "../styles/mainPage.css"; // CSS 파일 추가
+import WavesBackground from "../features/main/wavesBackground"; // 파도 배경 컴포넌트
+import "../styles/mainPage.css";
 
 export default function MainPage() {
     const [panelType, setPanelType] = useState(null);
@@ -13,11 +13,10 @@ export default function MainPage() {
     const closePanel = () => setPanelType(null);
 
     return (
-        <div
-            className="main-container"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
-            {/* 로그인/회원가입 버튼 */}
+        <div className="main-container">
+            <WavesBackground />
+
+            {/* 상단 로그인/회원가입 버튼 */}
             <div className="top">
                 <button
                     onClick={() => setPanelType("login")}
@@ -33,9 +32,9 @@ export default function MainPage() {
                 </button>
             </div>
 
-            {/* 메인 타이틀 및 버튼 */}
+            {/* 중앙 콘텐츠 */}
             <div className="content">
-                <h1 className="main-title ">ColorSync</h1>
+                <h1 className="main-title">ColorSync</h1>
                 <p className="sub-title text-5xl">데이터에 감각을 더하다</p>
                 <button
                     onClick={() => navigate("/dashboard")}
