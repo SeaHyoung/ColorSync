@@ -116,13 +116,13 @@ const build21SolidTiles = (colors) => {
 };
 
 export default function ColorChip({
-    colors = [],
-    width = 220,
-    rowGap = 0,
-    radius = 0,
-    fontSize = 22,
-    style,
-}) {
+                                      colors = [],
+                                      width = 220,
+                                      rowGap = 0,
+                                      radius = 0,
+                                      fontSize = 22,
+                                      style,
+                                  }) {
     const tiles = useMemo(() => build21SolidTiles(colors), [colors]);
 
     return (
@@ -133,6 +133,32 @@ export default function ColorChip({
             }}
             title={colors.map(normalizeHex).join(" • ")}
         >
+            <style>{`
+                .color-chips-container {
+                    display: grid;
+                    gap: 0px;
+                }
+                .color-chips {
+                    opacity: 0;
+                    transform: translateY(8px) scale(0.98);
+                    animation: chip-pop 0.45s cubic-bezier(.2,.8,.2,1) forwards;
+                    animation-delay: var(--delay);
+                    border-radius: 0px;
+                    font-weight: 600;
+                    padding: 8px 10px;
+                    transition: transform 0.2s ease;
+                    cursor: pointer;
+                }
+                .color-chips:hover {
+                    transform: scale(1.03);
+                }
+                @keyframes chip-pop {
+                    0%   { opacity: 0; transform: translateY(8px) scale(0.95); }
+                    60%  { opacity: 1; transform: translateY(0) scale(1.02); }
+                    100% { opacity: 1; transform: translateY(0) scale(1.00); }
+                }
+            `}</style>
+
             {tiles.map((t, i) => {
                 const hex = normalizeHex(t.hex);
                 return (
@@ -144,6 +170,8 @@ export default function ColorChip({
                         style={{
                             background: hex,
                             color: textOn(hex),
+                            // 🟡 추가된 부분: 순차 애니메이션 지연
+                            "--delay": `${i * 40}ms`,
                         }}
                     >
                         {t.isKey ? hex : ""}
@@ -153,6 +181,7 @@ export default function ColorChip({
         </div>
     );
 }
+
 
 // 컬러슬라이더 기존 코드
 // // src/features/dashboard/colorSlider.jsx
