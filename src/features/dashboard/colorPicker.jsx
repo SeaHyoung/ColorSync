@@ -154,7 +154,7 @@ function ColorPickerBase({
                     </Button>
                 </div>
             </Popover>
-        </>
+         </>
     );
 }
 

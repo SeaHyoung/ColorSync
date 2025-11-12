@@ -147,7 +147,7 @@ export default function ColorChip({
                         }}
                     >
                         {t.isKey ? hex : ""}
-                    </div>
+                     </div>
                 );
             })}
         </div>
