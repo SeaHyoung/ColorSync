@@ -198,7 +198,8 @@
 .setting-board {
     height: 80vh;
     flex: 0 0 18%;
-    overflow: scroll;
+    /* overflow: scroll; */
+    overflow: visible;
     scrollbar-width: none;
     display: flex;
     flex-direction: column;
@@ -264,19 +265,6 @@
     align-items: center;
     gap: 3%;
     display: flex; /* gap설정시 필수 */
-}
-
-.setting-board .color-options .color-choicer {
-    width: 14.1%;
-    height: auto;
-    aspect-ratio: 1 / 1; /* 너비와 높이 비율을 1:1로 설정하여 정사각형으로 만듦 */
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.setting-board .color-options .color-choicer:hover {
-    /* 호버 = 더 어둡게 */
-    filter: brightness(0.9);
 }
 
 .setting-board .color-options button {

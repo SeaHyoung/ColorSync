@@ -30,7 +30,7 @@ export default function BarChart({
         "#444444",
         "#202020ff",
     ],
-    dataCount = 6, //props 오류방지 기본값
+    dataCount = 4, //props 오류방지 기본값
 }) {
     //데이터값 처음 렌더링 후 고정 useState 사용
 

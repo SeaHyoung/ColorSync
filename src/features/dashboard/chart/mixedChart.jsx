@@ -60,7 +60,10 @@ export default function MixedChart({
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: { position: "top" },
+            legend: {
+                display: false,
+                position: "top",
+            },
         },
         scales: {
             y: {

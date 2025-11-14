@@ -1,160 +1,118 @@
-import React, { useState, useEffect, useRef, memo } from "react";
-import {
-    Button,
-    Popover,
-    TextField,
-    IconButton,
-    InputAdornment,
-} from "@mui/material";
+import React, { useState, memo } from "react";
 import { HexColorPicker } from "react-colorful";
+import { Popover, Button } from "@mui/material";
 
-function normalizeHex(s) {
-    if (!s) return "";
-    let t = s.trim().toLowerCase();
-    if (!t.startsWith("#")) t = "#" + t;
-    if (t.length === 4) t = `#${t[1]}${t[1]}${t[2]}${t[2]}${t[3]}${t[3]}`;
-    return t;
-}
-function isValidHex6(s) {
-    return /^#[0-9a-f]{6}$/.test(s);
-}
-function getContrastColor(hx) {
-    const n = normalizeHex(hx);
-    if (!isValidHex6(n)) return "#000";
-    const r = parseInt(n.slice(1, 3), 16);
-    const g = parseInt(n.slice(3, 5), 16);
-    const b = parseInt(n.slice(5, 7), 16);
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? "#000" : "#fff";
-}
+// value === "none" → 투명 상태
+// onChange("none") → SettingBoard가 처리해야 함
 
-function ColorPickerBase({
-    value = "#ffffff",
-    onChange,
-    onClose,
-    disabled = false,
-}) {
+function ColorPickerBase({ label, value, onChange, onClose }) {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [hex, setHex] = useState(value);
-    const inputRef = useRef(null);
 
-    const open = Boolean(anchorEl);
+    const hex = value ?? "none";
+    const isNone = hex === "none";
 
-    const handleOpen = (e) => setAnchorEl(e.currentTarget);
+    const handleOpen = (e) => {
+        setAnchorEl(e.currentTarget);
+
+        // 팝업 열릴 때 none이면 기본 색(흰색)으로 변환해 Picker가 뜨도록 한다.
+        if (hex === "none") {
+            onChange?.("#ffffff");
+        }
+    };
+
     const handleClose = () => {
         setAnchorEl(null);
         onClose?.();
     };
 
-    // 외부 값 ↔ 내부 동기화
-    useEffect(() => {
-        if (typeof value === "string" && value !== hex) setHex(value);
-    }, [value]);
-
-    // 열릴 때 입력창 자동 포커스
-    useEffect(() => {
-        if (open && inputRef.current) {
-            const id = setTimeout(() => {
-                inputRef.current.focus();
-                inputRef.current.select();
-            }, 40);
-            return () => clearTimeout(id);
-        }
-    }, [open]);
-
-    const applyHex = (raw) => {
-        const n = normalizeHex(raw);
-        setHex(n);
-        if (isValidHex6(n)) onChange?.(n);
-    };
-
     return (
         <>
-            {/* 글씨 없이 버튼 전체가 색 */}
-            <Button
+            <button
+                type="button"
+                className="color-choicer"
                 onClick={handleOpen}
-                disabled={disabled}
-                className="cs-swatch" // ← 고유 클래스 부여
-                sx={{
-                    minWidth: 40,
-                    width: 40,
-                    height: 40,
-                    borderRadius: "8px",
-                    // ↓↓↓ 핵심: !important 로 덮어쓰기
-                    backgroundColor: `${hex} !important`,
-                    color: `${getContrastColor(hex)} !important`,
-                    border: "1px solid rgba(0,0,0,0.2)",
-                    "&:hover": { backgroundColor: `${hex} !important` },
+                style={{
+                    background:
+                        hex === "none"
+                            ? "repeating-linear-gradient(45deg, #ccc 0, #ccc 10px, #fff 10px, #fff 20px)"
+                            : hex,
+                    border:
+                        hex === "none" ? "2px dashed #666" : "1px solid #aaa",
+                    cursor: "pointer",
                 }}
-                title={hex}
             />
 
             <Popover
-                open={open}
+                open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={handleClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
-                PaperProps={{ sx: { p: 2 } }}
             >
-                <HexColorPicker
-                    color={hex}
-                    onChange={(c) => {
-                        setHex(c);
-                        onChange?.(c);
-                    }}
-                />
+                <div style={{ padding: "16px", width: "200px" }}>
+                    <div style={{ marginBottom: "10px", fontSize: "14px" }}>
+                        {label || "색상 선택"}
+                    </div>
 
-                <TextField
-                    inputRef={inputRef}
-                    label="HEX"
-                    value={hex}
-                    onChange={(e) => setHex(e.target.value)}
-                    onBlur={(e) => applyHex(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter") applyHex(e.currentTarget.value);
-                    }}
-                    size="small"
-                    margin="dense"
-                    placeholder="#RRGGBB"
-                    error={hex && !isValidHex6(normalizeHex(hex))}
-                    helperText={
-                        hex && !isValidHex6(normalizeHex(hex))
-                            ? "예: #12abef"
-                            : " "
-                    }
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="HEX 복사"
-                                    onClick={() =>
-                                        navigator.clipboard.writeText(
-                                            normalizeHex(hex)
-                                        )
-                                    }
-                                    size="small"
-                                >
-                                    📋
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                />
+                    {/* 투명 상태 안내 */}
+                    {isNone ? (
+                        <div
+                            style={{
+                                marginBottom: "12px",
+                                padding: "8px",
+                                border: "1px solid #ccc",
+                                borderRadius: "4px",
+                                textAlign: "center",
+                                background: "#f7f7f7",
+                            }}
+                        >
+                            현재 상태: 투명
+                        </div>
+                    ) : (
+                        <>
+                            <HexColorPicker
+                                color={hex}
+                                onChange={(color) => onChange?.(color)}
+                            />
 
-                <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginTop: 8,
-                    }}
-                >
-                    <Button size="small" onClick={handleClose}>
-                        닫기
-                    </Button>
+                            <input
+                                type="text"
+                                value={hex}
+                                onChange={(e) => onChange?.(e.target.value)}
+                                style={{
+                                    marginTop: "12px",
+                                    width: "100%",
+                                    padding: "6px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #ccc",
+                                    fontSize: "14px",
+                                    textAlign: "center",
+                                }}
+                            />
+                        </>
+                    )}
+
+                    <div
+                        style={{
+                            marginTop: "12px",
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Button
+                            onClick={() => {
+                                onChange?.("none");
+                                handleClose();
+                            }}
+                        >
+                            투명
+                        </Button>
+
+                        <Button onClick={handleClose}>닫기</Button>
+                    </div>
                 </div>
             </Popover>
-         </>
+        </>
     );
 }
 

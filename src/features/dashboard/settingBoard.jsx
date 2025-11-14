@@ -19,7 +19,7 @@ const SettingBoard = ({
 
     // chartBgc는 컬러 피커의 임시 상태(tempBgc)로 대체 가능
     const currentAttributeCount =
-        slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 1;
+        slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 4;
     const currentChartBgc =
         slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "#ffffff";
 
@@ -56,9 +56,9 @@ const SettingBoard = ({
     const [colors, setColors] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const [tempBgc, settempBgc] = useState("#ffffff");
+    const [tempBgc, settempBgc] = useState("none");
     const [tempBoardBg, setTempBoardBg] = useState("#ffffff");
-    const [tempKey, setTempKey] = useState("#000000");
+    const [tempKey, setTempKey] = useState("#ffffff");
 
     //selectedSlotIndex 변경 시 상태 초기화/업데이트
     useEffect(() => {
@@ -291,11 +291,9 @@ const SettingBoard = ({
                         <button
                             type="button"
                             key={n}
-                            // onClick={() => setAttributeCount(n)}
                             onClick={() =>
                                 updateSlotSetting("attributeCount", n)
                             }
-                            // className={attributeCount === n ? "selected" : ""}
                             className={
                                 currentAttributeCount === n ? "selected" : ""
                             }
@@ -305,15 +303,17 @@ const SettingBoard = ({
                     ))}
                 </div>
             </div>
+
             <div className="section backgrounds-color">
                 <label>차트 배경색</label>
                 <div className="color-options">
                     <ColorPicker
                         label="차트 배경색"
-                        value={tempBgc} // chartBgc > tempBgc(임시상태)로 변경
+                        value={tempBgc}
                         onChange={onChangeBackgroundLive}
                         onClose={onBackgroundPickerClose}
                     />
+
                     {bgHistory.map((hex, i) => (
                         <button
                             key={i}
@@ -322,11 +322,12 @@ const SettingBoard = ({
                             title={hex}
                             aria-label={`히스토리 색상 ${hex}`}
                             style={{ background: hex }}
-                            onClick={() => setChartBgc(hex)} // 클릭하면 다시 적용 (선택)
+                            onClick={() => onChangeBackgroundLive(hex)} // ★ 수정됨
                         />
                     ))}
                 </div>
             </div>
+
             <div className="section backgrounds-color">
                 <label>차트보드 배경색</label>
                 <div className="color-options">
@@ -336,6 +337,7 @@ const SettingBoard = ({
                         onChange={onChangeBoardBgcLive}
                         onClose={onBoardBgcPickerClose}
                     />
+
                     {boardBgHistory.map((hex, i) => (
                         <button
                             key={i}
@@ -344,11 +346,12 @@ const SettingBoard = ({
                             title={hex}
                             aria-label={`히스토리 색상 ${hex}`}
                             style={{ background: hex }}
-                            onClick={() => setBoardBgc(hex)} // 클릭하면 다시 적용 (선택)
+                            onClick={() => onChangeBoardBgcLive(hex)} // ★ 수정됨
                         />
                     ))}
                 </div>
             </div>
+
             <div className="suggestion-option">
                 <div className="section keywords">
                     <label>키워드</label>
@@ -357,7 +360,6 @@ const SettingBoard = ({
                         placeholder="  키워드를 입력하세요"
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
-                        // onKeyDown={handleKeywordKeyDown}
                         className="keyword-input"
                     />
                 </div>
@@ -366,11 +368,11 @@ const SettingBoard = ({
                     <label>키 컬러</label>
                     <div className="color-options">
                         <ColorPicker
-                            // label="키 컬러"
                             value={keyColor}
                             onChange={onChangeKeyColorLive}
                             onClose={onKeyPickerClose}
                         />
+
                         {keyHistory.map((hex, i) => (
                             <button
                                 key={i}
@@ -379,7 +381,7 @@ const SettingBoard = ({
                                 title={hex}
                                 aria-label={`히스토리 색상 ${hex}`}
                                 style={{ background: hex }}
-                                onClick={() => setKeyColor(hex)}
+                                onClick={() => onChangeKeyColorLive(hex)} // ★ 수정됨
                             />
                         ))}
                     </div>
@@ -419,9 +421,7 @@ const SettingBoard = ({
                                 type="button"
                                 className="results-color-btn"
                                 title={hex}
-                                style={{
-                                    background: hex,
-                                }}
+                                style={{ background: hex }}
                                 onClick={() =>
                                     navigator.clipboard.writeText(hex)
                                 }
@@ -430,6 +430,7 @@ const SettingBoard = ({
                     </div>
                 </div>
             </div>
+
             <div className="btn-wrap">
                 <button
                     type="button"
@@ -438,6 +439,7 @@ const SettingBoard = ({
                 >
                     적용
                 </button>
+
                 <button
                     type="button"
                     className="reset-btn"
