@@ -134,13 +134,13 @@ const build21SolidTiles = (colors) => {
 };
 
 export default function ColorChip({
-                                      colors = [],
-                                      width = 220,
-                                      rowGap = 0,
-                                      radius = 0,
-                                      fontSize = 22,
-                                      style,
-                                  }) {
+    colors = [],
+    width = 220,
+    rowGap = 0,
+    radius = 0,
+    fontSize = 22,
+    style,
+}) {
     const tiles = useMemo(() => build21SolidTiles(colors), [colors]);
 
     // 팔레트가 바뀔 때마다 애니메이션 다시 실행
