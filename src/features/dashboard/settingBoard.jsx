@@ -11,10 +11,11 @@ const SettingBoard = ({
     selectedSlotIndex,
     onPaletteChange,
 }) => {
-    //   --------------------------------------------------   //
-    //                     설정 관련 상태                     //
-    //   --------------------------------------------------  //
-    const [emphasisAttr, setEmphasisAttr] = useState(null); // 강조 속성 수
+    // =========================================================================
+    //                     설정 관련 상태                     
+    // =========================================================================
+    // emphasisAttr의 초기값을 0으로 설정하여 null로 전송되는 것을 방지
+    const [emphasisAttr, setEmphasisAttr] = useState(0); // 강조 속성 수
     const [keyColor, setKeyColor] = useState("none");
     const [keyword, setKeyword] = useState("");
     const [colors, setColors] = useState([]); // 추천 받은 컬러 팔레트
@@ -48,12 +49,13 @@ const SettingBoard = ({
     // 현재 선택된 슬롯의 설정값 편의 변수 (props 또는 기본값 사용)
     const currentAttributeCount =
         slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 4;
+    // currentChartBgc는 설정값이 없으면 'none'으로 기본값 유지
     const currentChartBgc =
-        slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "none";
+        slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "none"; 
 
-    //   --------------------------------------------------  //
-    //       선택된 슬롯 변경 시 상태 초기화/업데이트         //
-    //   --------------------------------------------------  //
+    // =========================================================================
+    //       선택된 슬롯 변경 시 상태 초기화/업데이트         
+    // =========================================================================
     useEffect(() => {
         const currentSlot = slots?.[selectedSlotIndex];
         if (currentSlot && currentSlot.settings) {
@@ -79,9 +81,9 @@ const SettingBoard = ({
         onPaletteChange?.(colors || []);
     }, [colors, onPaletteChange]);
 
-    //   --------------------------------------------------   //
-    //          슬롯 설정 업데이트(배경색 등 자동 적용)       //
-    //   --------------------------------------------------  //
+    // =========================================================================
+    //          슬롯 설정 업데이트(배경색 등 자동 적용)       
+    // =========================================================================
     const updateSlotSetting = (key, value) => {
         if (selectedSlotIndex == null) {
             console.warn("적용할 차트 슬롯을 선택하세요.");
@@ -102,9 +104,9 @@ const SettingBoard = ({
         });
     };
 
-    //   --------------------------------------------------   //
-    //                      핸들러 함수                       //
-    //   --------------------------------------------------  //
+    // =========================================================================
+    //                      핸들러 함수                       
+    // =========================================================================
 
     // 추천 컬러 호출
     const fetchPalette = async () => {
@@ -115,10 +117,23 @@ const SettingBoard = ({
         setLoading(true);
         try {
             const text = (keyword || "").trim();
+            
+            // 수정된 부분: keyColor, emphasisAttr, boardBgc, chartBgc를 payload에 추가
+            const payload = { 
+                query: text, 
+                n: 6,
+                // 'none' 값이면 서버에서 null로 처리되도록 null로 전송
+                keyColor: keyColor === 'none' ? null : keyColor, 
+                emphasisAttr: emphasisAttr || 0, // 0이 null로 전송되는 것을 방지
+                boardBgc: boardBgc === 'none' ? null : boardBgc,
+                chartBgc: currentChartBgc === 'none' ? null : currentChartBgc,
+            };
+            
             const { data } = await axios.post(
                 "http://localhost:5050/api/palette",
-                { query: text, n: 6 }
+                payload // payload 전송
             );
+            
             const list = Array.isArray(data?.colors)
                 ? data.colors.slice(0, 6)
                 : [];
@@ -154,13 +169,12 @@ const SettingBoard = ({
         };
 
         try {
-            const res = await fetch("/api/apply-settings", {
+            const res = await fetch("http://localhost:5050/api/apply-settings", { // 서버 포트 명시
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
             const data = await res.json();
-            // console.log("서버 응답:", data);
 
             setSlots((prev) => {
                 const next = [...prev];
@@ -231,9 +245,9 @@ const SettingBoard = ({
         });
     };
 
-    //   --------------------------------------------------   //
-    //                         랜더링                         //
-    //   --------------------------------------------------  //
+    // =========================================================================
+    //                         랜더링                         
+    // =========================================================================
     return (
         <div className="setting-board">
             <div className="section attribute-count">
