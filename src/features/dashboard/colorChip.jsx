@@ -169,7 +169,7 @@ export default function ColorChip({
                     display: grid;
                     gap: 0px;
 
-                    /* ✅ 오른쪽에서 왼쪽으로 슬라이드 인 */
+                    /* 오른쪽에서 왼쪽으로 슬라이드 인 */
                     opacity: 0;
                     // transform: translateX(40px);
                     animation: chips-slide-in 0.9s cubic-bezier(.2,.8,.2,1.05) forwards;
