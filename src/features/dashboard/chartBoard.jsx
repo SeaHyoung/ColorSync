@@ -72,18 +72,48 @@ const ChartBoard = ({
 
     // 차트보드 제목 상태
     const [boardTitle, setBoardTitle] = useState("Chart Board");
-    // 차트보드 제목변경 핸들러
+    // 차트보드 제목변경
     const handleTitleChange = (e) => {
         setBoardTitle(e.target.value);
     };
+
+    // 차트보드 제목색상 변경(배경색 기준 반전)
+    const isLightColor = (color) => {
+        if (!color || color === "none") return true;
+
+        let c = color.substring(1); // # 제거
+
+        if (c.length === 3) {
+            c = c
+                .split("")
+                .map((ch) => ch + ch)
+                .join("");
+        }
+
+        const r = parseInt(c.substr(0, 2), 16);
+        const g = parseInt(c.substr(2, 2), 16);
+        const b = parseInt(c.substr(4, 2), 16);
+
+        // HSP
+        const brightness = Math.sqrt(
+            0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b)
+        );
+
+        return brightness > 160; // 밝으면 true
+    };
+
     return (
         <div className="chart-board" style={{ backgroundColor: boardBgc }}>
             {/* 차트보드 타이틀 */}
+
             <input
                 className="board-title"
                 type="text"
                 value={boardTitle}
                 onChange={handleTitleChange}
+                style={{
+                    color: isLightColor(boardBgc) ? "black" : "white",
+                }}
             />
             {/* 차트보드 */}
             <div className="boards">

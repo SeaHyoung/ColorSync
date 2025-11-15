@@ -168,19 +168,6 @@
 }
 
 /* -----------ColorChip-----------  */
-.color-chips-container {
-    width: 7vw;
-    height: 100%;
-    display: grid;
-    /* row-gap: 0; */
-    padding: 0;
-    box-sizing: border-box;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 0;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-}
-
 .color-chips {
     border-radius: radius;
     border: 1px solid rgba(0, 0, 0, 0.08);

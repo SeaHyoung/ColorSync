@@ -134,13 +134,13 @@ const build21SolidTiles = (colors) => {
 };
 
 export default function ColorChip({
-                                      colors = [],
-                                      width = 220,
-                                      rowGap = 0,
-                                      radius = 0,
-                                      fontSize = 22,
-                                      style,
-                                  }) {
+    colors = [],
+    width = 220,
+    rowGap = 0,
+    radius = 0,
+    fontSize = 22,
+    style,
+}) {
     const tiles = useMemo(() => build21SolidTiles(colors), [colors]);
 
     // 팔레트가 바뀔 때마다 애니메이션 다시 실행
@@ -169,9 +169,9 @@ export default function ColorChip({
                     display: grid;
                     gap: 0px;
 
-                    /* ✅ 오른쪽에서 왼쪽으로 슬라이드 인 */
+                    /* 오른쪽에서 왼쪽으로 슬라이드 인 */
                     opacity: 0;
-                    transform: translateX(40px);
+                    // transform: translateX(40px);
                     animation: chips-slide-in 0.9s cubic-bezier(.2,.8,.2,1.05) forwards;
                 }
 
