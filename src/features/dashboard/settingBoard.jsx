@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ColorPicker from "./colorPicker.jsx";
 
-//props 추가됨(slot, setSlots, selectedSlotIndex)
+// Props 정의
 const SettingBoard = ({
     slots,
     setSlots,
@@ -11,19 +11,19 @@ const SettingBoard = ({
     selectedSlotIndex,
     onPaletteChange,
 }) => {
-    // 기본값 지정
-    const [emphasisAttr, setEmphasisAttr] = useState(null);
-    const [keyColor, setKeyColor] = useState("#ffffff");
-    // const [attributeCount, setAttributeCount] = useState(null);
-    // const [chartBgc, setChartBgc] = useState("#ffffff");
+    //   --------------------------------------------------   //
+    //                     설정 관련 상태                     //
+    //   --------------------------------------------------  //
+    const [emphasisAttr, setEmphasisAttr] = useState(null); // 강조 속성 수
+    const [keyColor, setKeyColor] = useState("none");
+    const [keyword, setKeyword] = useState("");
+    const [colors, setColors] = useState([]); // 추천 받은 컬러 팔레트
 
-    // chartBgc는 컬러 피커의 임시 상태(tempBgc)로 대체 가능
-    const currentAttributeCount =
-        slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 4;
-    const currentChartBgc =
-        slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "#ffffff";
-
-    //차트배경색, 보드배경색, 키컬러 히스토리 초기값
+    const [loading, setLoading] = useState(false); // 추천 컬러 로딩 상태
+    const [tempBgc, settempBgc] = useState("none"); // 임시 차트 배경색
+    const [tempBoardBg, setTempBoardBg] = useState("#none"); // 임시 보드 배경색
+    const [tempKey, setTempKey] = useState("#none"); // 임시 키 컬러
+    // 색상 히스토리 상태
     const [bgHistory, setBgHistory] = useState([
         "#ffffff",
         "#ffffff",
@@ -31,7 +31,6 @@ const SettingBoard = ({
         "#ffffff",
         "#ffffff",
     ]);
-
     const [boardBgHistory, setBoardBgHistory] = useState([
         "#ffffff",
         "#ffffff",
@@ -39,7 +38,6 @@ const SettingBoard = ({
         "#ffffff",
         "#ffffff",
     ]);
-
     const [keyHistory, setKeyHistory] = useState([
         "#ffffff",
         "#ffffff",
@@ -47,60 +45,48 @@ const SettingBoard = ({
         "#ffffff",
         "#ffffff",
     ]);
-    const [keyword, setKeyword] = useState("");
+    // 현재 선택된 슬롯의 설정값 편의 변수 (props 또는 기본값 사용)
+    const currentAttributeCount =
+        slots?.[selectedSlotIndex]?.settings?.attributeCount ?? 4;
+    const currentChartBgc =
+        slots?.[selectedSlotIndex]?.settings?.chartBgc ?? "none";
 
-    // 해시태그 상태 (등장/퇴장 애니메이션용)
-    const [tags, setTags] = useState([]);
-
-    // 추천 컬러 상태
-    const [colors, setColors] = useState([]);
-    const [loading, setLoading] = useState(false);
-
-    const [tempBgc, settempBgc] = useState("none");
-    const [tempBoardBg, setTempBoardBg] = useState("#ffffff");
-    const [tempKey, setTempKey] = useState("#ffffff");
-
-    //selectedSlotIndex 변경 시 상태 초기화/업데이트
+    //   --------------------------------------------------  //
+    //       선택된 슬롯 변경 시 상태 초기화/업데이트         //
+    //   --------------------------------------------------  //
     useEffect(() => {
         const currentSlot = slots?.[selectedSlotIndex];
         if (currentSlot && currentSlot.settings) {
-            const {
-                attributeCount,
-                emphasisAttr,
-                chartBgc,
-                keyColor,
-                colors,
-                keyword,
-            } = currentSlot.settings;
-            // setAttributeCount(attributeCount ?? 0);
-            // setChartBgc(chartBgc ?? "none");
+            const { emphasisAttr, keyColor, colors, keyword } =
+                currentSlot.settings;
+
             setEmphasisAttr(emphasisAttr ?? 0);
-            setKeyColor(keyColor ?? "#ffffff");
+            setKeyColor(keyColor ?? "none");
             if (Array.isArray(colors) && colors.length > 0) {
                 setColors(colors);
             }
             setKeyword(keyword ?? "");
         } else {
             // 선택된 슬롯이 없거나 설정이 없는 경우 초기값으로
-            // setAttributeCount(0);
-            // setChartBgc("none");
             setBoardBgc("none");
             setEmphasisAttr(0);
             setKeyColor("none");
         }
     }, [selectedSlotIndex, slots]);
 
+    // 추천 컬러(colors)가 변경될 때 onPaletteChange 콜백 호출
     useEffect(() => {
         onPaletteChange?.(colors || []);
     }, [colors, onPaletteChange]);
 
-    // 적용버튼 없이 자동업데이트(속성수, chartBgc, boardBgc)
+    //   --------------------------------------------------   //
+    //          슬롯 설정 업데이트(배경색 등 자동 적용)       //
+    //   --------------------------------------------------  //
     const updateSlotSetting = (key, value) => {
         if (selectedSlotIndex == null) {
             console.warn("적용할 차트 슬롯을 선택하세요.");
             return;
         }
-
         setSlots((prev) => {
             const next = [...prev];
             if (next[selectedSlotIndex]) {
@@ -116,106 +102,9 @@ const SettingBoard = ({
         });
     };
 
-    // 적용 버튼 클릭 핸들러
-    const handleApply = async () => {
-        if (selectedSlotIndex == null) {
-            alert("적용할 차트 슬롯을 선택하세요");
-            return;
-        }
-        const payload = {
-            // attributeCount: attributeCount ?? 1,
-            attributeCount: currentAttributeCount,
-            // chartBgc,
-            chartBgc: currentChartBgc,
-            boardBgc,
-            emphasisAttr: emphasisAttr ?? 1,
-            keyColor,
-            keyword,
-            colors,
-        };
-
-        try {
-            const res = await fetch("/api/apply-settings", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-            const data = await res.json();
-            // console.log("서버 응답:", data);
-
-            setSlots((prev) => {
-                const next = [...prev];
-                if (next[selectedSlotIndex]) {
-                    next[selectedSlotIndex].settings = {
-                        ...payload, // 서버에 보낸 전체 페이로드를 설정으로 저장
-                    };
-                }
-                return next;
-            });
-
-            // alert("서버 응답: " + (data?.message || "OK"));
-        } catch (err) {
-            console.error("에러 발생:", err);
-            alert("요청 실패: " + (err?.message || "unknown error"));
-        }
-    };
-
-    const handleReset = () => {
-        // setAttributeCount(1);
-        // setChartBgc("#ff ffff");
-        setEmphasisAttr(1);
-        setBoardBgc("#ffffff");
-        setKeyColor("#ffffff");
-        setKeyword("");
-        setColors([]);
-    };
-
-    // 실시간 미리보기만 반영(컬러피커 버튼에만 반영,히스토리는 추가 X)
-    const onChangeBackgroundLive = (hex) => {
-        settempBgc(hex);
-        // setChartBgc(hex);
-        updateSlotSetting("chartBgc", hex);
-    };
-
-    // 컬러피커 닫힐 때 최종 선택만 히스토리에 1회 기록
-    const onBackgroundPickerClose = () => {
-        setBgHistory((prev) => {
-            if (prev[0] === tempBgc) return prev; // 같은 색이면 스킵
-            const next = [tempBgc, ...prev.filter((c) => c !== tempBgc)];
-            return next.slice(0, 5);
-        });
-    };
-
-    //보드배경
-    const onChangeBoardBgcLive = (hex) => {
-        setTempBoardBg(hex);
-        setBoardBgc(hex);
-    };
-
-    const onBoardBgcPickerClose = () => {
-        setBoardBgHistory((prev) => {
-            if (prev[0] === tempBoardBg) return prev; // 같은 색이면 스킵
-            const next = [
-                tempBoardBg,
-                ...prev.filter((c) => c !== tempBoardBg),
-            ];
-            return next.slice(0, 5);
-        });
-    };
-
-    //키컬러
-    const onChangeKeyColorLive = (hex) => {
-        setTempKey(hex);
-        setKeyColor(hex);
-    };
-
-    const onKeyPickerClose = () => {
-        setKeyHistory((prev) => {
-            if (prev[0] === tempKey) return prev;
-            const next = [tempKey, ...prev.filter((c) => c !== tempKey)];
-            return next.slice(0, 5);
-        });
-    };
+    //   --------------------------------------------------   //
+    //                      핸들러 함수                       //
+    //   --------------------------------------------------  //
 
     // 추천 컬러 호출
     const fetchPalette = async () => {
@@ -248,40 +137,103 @@ const SettingBoard = ({
         }
     };
 
-    // const handleKeywordKeyDown = (e) => {
-    //     if (e.key === "Enter" && keyword.trim()) {
-    //         const q = keyword.trim();
-    //         addTag(q);
-    //         fetchPalette(q);
-    //         setKeyword("");
-    //     }
-    // };
-
-    // 태그 클릭 시: 앞의 '#'과 공백을 제거하고 입력창에 단어만 세팅
-    const pickTag = (tag) => setKeyword(tag.replace(/^#\s?/, ""));
-
-    // 해시태그 추가
-    const addTag = (text) => {
-        const clean = text.trim();
-        if (!clean) return;
-
-        const newTag = {
-            id: Date.now() + Math.random(),
-            label: `# ${clean}`,
-            removing: false,
+    // 적용 버튼 클릭
+    const handleApply = async () => {
+        if (selectedSlotIndex == null) {
+            alert("적용할 차트 슬롯을 선택하세요");
+            return;
+        }
+        const payload = {
+            attributeCount: currentAttributeCount,
+            chartBgc: currentChartBgc,
+            boardBgc,
+            emphasisAttr: emphasisAttr ?? 1,
+            keyColor,
+            keyword,
+            colors,
         };
-        setTags((prev) => {
-            const next = [...prev, newTag];
-            // 최신 3개만 유지
-            return next.slice(-3);
+
+        try {
+            const res = await fetch("/api/apply-settings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            // console.log("서버 응답:", data);
+
+            setSlots((prev) => {
+                const next = [...prev];
+                if (next[selectedSlotIndex]) {
+                    next[selectedSlotIndex].settings = {
+                        ...payload,
+                    };
+                }
+                return next;
+            });
+
+            // alert("서버 응답: " + (data?.message || "OK"));
+        } catch (err) {
+            console.error("에러 발생:", err);
+            alert("요청 실패: " + (err?.message || "unknown error"));
+        }
+    };
+
+    // 초기화 버튼 클릭
+    const handleReset = () => {
+        setEmphasisAttr(0);
+        setBoardBgc("none");
+        setKeyColor("none");
+        setKeyword("");
+        setColors([]);
+    };
+
+    // 보드배경색 실시간 변경
+    const onChangeBoardBgcLive = (hex) => {
+        setTempBoardBg(hex);
+        setBoardBgc(hex);
+    };
+
+    const onBoardBgcPickerClose = () => {
+        setBoardBgHistory((prev) => {
+            if (prev[0] === tempBoardBg) return prev; // 같은 색이면 스킵
+            const next = [
+                tempBoardBg,
+                ...prev.filter((c) => c !== tempBoardBg),
+            ];
+            return next.slice(0, 5);
+        });
+    };
+    // 차트배경색 실시간 변경
+    const onChangeBackgroundLive = (hex) => {
+        settempBgc(hex);
+        updateSlotSetting("chartBgc", hex);
+    };
+
+    const onBackgroundPickerClose = () => {
+        setBgHistory((prev) => {
+            if (prev[0] === tempBgc) return prev;
+            const next = [tempBgc, ...prev.filter((c) => c !== tempBgc)];
+            return next.slice(0, 5);
+        });
+    };
+    // 키컬러 실시간 변경
+    const onChangeKeyColorLive = (hex) => {
+        setTempKey(hex);
+        setKeyColor(hex);
+    };
+
+    const onKeyPickerClose = () => {
+        setKeyHistory((prev) => {
+            if (prev[0] === tempKey) return prev;
+            const next = [tempKey, ...prev.filter((c) => c !== tempKey)];
+            return next.slice(0, 5);
         });
     };
 
-    // 태그 삭제
-    const removeTag = (id) => {
-        setTags((prev) => prev.filter((t) => t.id !== id));
-    };
-
+    //   --------------------------------------------------   //
+    //                         랜더링                         //
+    //   --------------------------------------------------  //
     return (
         <div className="setting-board">
             <div className="section attribute-count">
@@ -390,7 +342,7 @@ const SettingBoard = ({
                 <div className="section emphasis-attributes">
                     <label>강조속성 수</label>
                     <div className="attribute-options">
-                        {[1, 2, 3].map((n) => (
+                        {[0, 1, 2, 3].map((n) => (
                             <button
                                 type="button"
                                 key={n}

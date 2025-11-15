@@ -11,7 +11,7 @@ export default function dashboardPage() {
     const [slots, setSlots] = useState(Array(6).fill(null));
     const [selectedSlotIndex, setSelectedSlotIndex] = useState(null);
     const [palette, setPalette] = useState([]);
-    const [boardBgc, setBoardBgc] = useState("#ffffff");
+    const [boardBgc, setBoardBgc] = useState("none");
 
     return (
         <div className="dashboard-container">
