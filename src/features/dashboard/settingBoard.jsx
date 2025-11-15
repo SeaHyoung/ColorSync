@@ -331,7 +331,7 @@ const SettingBoard = ({
                 </div>
 
                 <div className="section keycolors">
-                    <label>키 컬러</label>
+                    <label>강조색상</label>
                     <div className="color-options">
                         <ColorPicker
                             value={keyColor}
