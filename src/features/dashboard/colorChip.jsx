@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 // HEX → RGB
 const hexToRgb = (hex) => {
@@ -15,9 +15,9 @@ const hexToRgb = (hex) => {
 
 // RGB → HEX
 const rgbToHex = (r, g, b) =>
-    `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b
+    `#${r.toString(16).padStart(2, "0")}${g
         .toString(16)
-        .padStart(2, "0")}`.toUpperCase();
+        .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase();
 
 // RGB → HSL
 const rgbToHsl = (r, g, b) => {
@@ -134,14 +134,17 @@ const build21SolidTiles = (colors) => {
 };
 
 export default function ColorChip({
-    colors = [],
-    width = 220,
-    rowGap = 0,
-    radius = 0,
-    fontSize = 22,
-    style,
-}) {
+                                      colors = [],
+                                      width = 220,
+                                      rowGap = 0,
+                                      radius = 0,
+                                      fontSize = 22,
+                                      style,
+                                  }) {
     const tiles = useMemo(() => build21SolidTiles(colors), [colors]);
+
+    // 어느 칩이 복사됐는지 (칩 중앙 토스트용)
+    const [copiedIndex, setCopiedIndex] = useState(null);
 
     // 팔레트가 바뀔 때마다 애니메이션 다시 실행
     const animationKey = useMemo(
@@ -171,11 +174,12 @@ export default function ColorChip({
 
                     /* 오른쪽에서 왼쪽으로 슬라이드 인 */
                     opacity: 0;
-                    // transform: translateX(40px);
-                    animation: chips-slide-in 0.9s cubic-bezier(.2,.8,.2,1.05) forwards;
+                    transform: translateX(60px);
+                    animation: chips-slide-in 1.2s cubic-bezier(.2,.8,.2,1.05) forwards;
                 }
 
                 .color-chips {
+                    position: relative;       
                     opacity: 1;
                     transform: none;
                     border-radius: ${radius}px;
@@ -184,6 +188,8 @@ export default function ColorChip({
                     transition: transform 0.2s ease;
                     cursor: pointer;
                     font-size: ${fontSize}px;
+                    display: flex;
+                    align-items: center;
                 }
 
                 .color-chips:hover {
@@ -193,33 +199,86 @@ export default function ColorChip({
                 @keyframes chips-slide-in {
                     0% {
                         opacity: 0;
+                        transform: translateX(60px); 
                     }
                     55% {
                         opacity: 1;
+                        transform: translateX(10px); 
                     }
-                        85% {
-                    opacity: 1;
-    }
+                    85% {
+                        opacity: 1;
+                    }
                     100% {
                         opacity: 1;
+                        transform: translateX(0px); 
+                    }
+                }
+
+                /* 칩 중앙에 뜨는 토스트 */
+                .chip-toast {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    padding: 6px 14px;
+                    border-radius: 10px;
+                    background: rgba(0, 0, 0, 0.78);
+                    color: #fff;
+                    font-size: 13px;
+                    font-weight: 600;
+                    pointer-events: none;
+                    opacity: 0;
+                    white-space: nowrap;
+                    z-index: 10;
+                    animation: toast-pop 0.8s ease-out forwards;
+                }
+
+                @keyframes toast-pop {
+                    0% {
+                        opacity: 0;
+                        transform: translate(-50%, -40%);
+                    }
+                    20% {
+                        opacity: 1;
+                        transform: translate(-50%, -50%);
+                    }
+                    80% {
+                        opacity: 1;
+                        transform: translate(-50%, -50%);
+                    }
+                    100% {
+                        opacity: 0;
+                        transform: translate(-50%, -60%);
                     }
                 }
             `}</style>
 
             {tiles.map((t, i) => {
                 const hex = normalizeHex(t.hex);
+                const isCopied = copiedIndex === i;
+
                 return (
                     <div
                         className="color-chips"
                         key={`${hex}-${i}`}
                         title={hex}
-                        onClick={() => navigator.clipboard.writeText(hex)}
+                        onClick={() => {
+                            navigator.clipboard.writeText(hex);
+                            setCopiedIndex(i);
+                            setTimeout(() => setCopiedIndex(null), 800);
+                        }}
                         style={{
                             background: hex,
                             color: textOn(hex),
                         }}
                     >
                         {t.isKey ? hex : ""}
+
+                        {isCopied && (
+                            <div className="chip-toast">
+                                Copied!
+                            </div>
+                        )}
                     </div>
                 );
             })}

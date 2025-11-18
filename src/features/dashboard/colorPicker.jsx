@@ -2,19 +2,15 @@ import React, { useState, memo } from "react";
 import { HexColorPicker } from "react-colorful";
 import { Popover, Button } from "@mui/material";
 
-// value === "none" → 투명 상태
-// onChange("none") → SettingBoard가 처리해야 함
-
 function ColorPickerBase({ label, value, onChange, onClose }) {
     const [anchorEl, setAnchorEl] = useState(null);
-
+    const [copied, setCopied] = useState(false);
     const hex = value ?? "none";
     const isNone = hex === "none";
 
     const handleOpen = (e) => {
         setAnchorEl(e.currentTarget);
 
-        // 팝업 열릴 때 none이면 기본 색(흰색)으로 변환해 Picker가 뜨도록 한다.
         if (hex === "none") {
             onChange?.("#ffffff");
         }
@@ -23,6 +19,15 @@ function ColorPickerBase({ label, value, onChange, onClose }) {
     const handleClose = () => {
         setAnchorEl(null);
         onClose?.();
+    };
+
+    // 복사
+    const handleCopy = () => {
+        if (hex && hex !== "none") {
+            navigator.clipboard.writeText(hex);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 900); // 0.9초 후 사라짐
+        }
     };
 
     return (
@@ -49,12 +54,56 @@ function ColorPickerBase({ label, value, onChange, onClose }) {
                 anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
             >
-                <div style={{ padding: "16px", width: "200px" }}>
+                <div
+                    style={{
+                        padding: "16px",
+                        width: "235px",
+                        position: "relative",
+                        fontFamily: "system-ui",
+                    }}
+                >
+                    {/* 토스트 애니메이션 CSS */}
+                    <style>{`
+                        .copy-toast {
+                            position: absolute;
+                            right: 8px;
+                            bottom: 20px; 
+                            padding: 6px 12px;
+                            background: rgba(0,0,0,0.8);
+                            color: #fff;
+                            font-size: 12px;
+                            border-radius: 6px;
+                            opacity: 0;
+                            animation: toast-pop 0.9s ease-out forwards;
+                            pointer-events: none;
+                            white-space: nowrap;
+                            z-index: 20;
+                        }
+
+                        @keyframes toast-pop {
+                            0% {
+                                opacity: 0;
+                                transform: translateY(6px);
+                            }
+                            20% {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                            80% {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                            100% {
+                                opacity: 0;
+                                transform: translateY(-4px);
+                            }
+                        }
+                    `}</style>
+
                     <div style={{ marginBottom: "10px", fontSize: "14px" }}>
                         {label || "색상 선택"}
                     </div>
 
-                    {/* 투명 상태 안내 */}
                     {isNone ? (
                         <div
                             style={{
@@ -75,20 +124,52 @@ function ColorPickerBase({ label, value, onChange, onClose }) {
                                 onChange={(color) => onChange?.(color)}
                             />
 
-                            <input
-                                type="text"
-                                value={hex}
-                                onChange={(e) => onChange?.(e.target.value)}
+                            {/* input + 복사버튼 */}
+                            <div
                                 style={{
                                     marginTop: "12px",
-                                    width: "100%",
-                                    padding: "6px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #ccc",
-                                    fontSize: "14px",
-                                    textAlign: "center",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "6px",
                                 }}
-                            />
+                            >
+                                <input
+                                    type="text"
+                                    value={hex}
+                                    onChange={(e) => onChange?.(e.target.value)}
+                                    style={{
+                                        flex: 1,
+                                        padding: "6px",
+                                        borderRadius: "4px",
+                                        border: "1px solid #ccc",
+                                        fontSize: "14px",
+                                        textAlign: "center",
+                                    }}
+                                />
+
+                                {/* 복사 버튼 */}
+                                <button
+                                    type="button"
+                                    onClick={handleCopy}
+                                    style={{
+                                        width: "32px",
+                                        height: "32px",
+                                        borderRadius: "6px",
+                                        border: "1px solid #ccc",
+                                        background: "#f8f8f8",
+                                        cursor: "pointer",
+                                        fontSize: "18px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    📋
+                                </button>
+                            </div>
+
+                            {/* 복사 토스트 */}
+                            {copied && <div className="copy-toast">Copied!</div>}
                         </>
                     )}
 
