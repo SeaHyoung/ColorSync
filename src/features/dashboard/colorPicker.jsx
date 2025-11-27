@@ -169,7 +169,9 @@ function ColorPickerBase({ label, value, onChange, onClose }) {
                             </div>
 
                             {/* 복사 토스트 */}
-                            {copied && <div className="copy-toast">Copied!</div>}
+                            {copied && (
+                                <div className="copy-toast">Copied!</div>
+                            )}
                         </>
                     )}
 
@@ -182,7 +184,7 @@ function ColorPickerBase({ label, value, onChange, onClose }) {
                     >
                         <Button
                             onClick={() => {
-                                onChange?.("none");
+                                onChange?.(null);
                                 handleClose();
                             }}
                         >

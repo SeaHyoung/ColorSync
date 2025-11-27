@@ -128,10 +128,12 @@ const ChartBoard = ({
                         onDrop={(e) => handleDrop(e, i)}
                         onClick={() => handleSlotClick(i)}
                         style={{
+                            // backgroundColor:
+                            //     slots[i]?.settings?.chartBgc === "none"
+                            //         ? "transparent"
+                            //         : slots[i]?.settings?.chartBgc,
                             backgroundColor:
-                                slots[i]?.settings?.chartBgc === "none"
-                                    ? "transparent"
-                                    : slots[i]?.settings?.chartBgc,
+                                slots[i]?.settings?.chartBgc ?? "transparent",
                         }}
                     >
                         {/* 슬롯 상태에 따라 차트/플레이스홀더 렌더 */}
